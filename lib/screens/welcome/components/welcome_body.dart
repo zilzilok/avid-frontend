@@ -1,7 +1,10 @@
 import 'package:avid_frontend/components/rounded_button.dart';
 import 'package:avid_frontend/res/constants.dart';
+import 'package:avid_frontend/screens/auth/login/login_screen.dart';
+import 'package:avid_frontend/screens/auth/reg/reg_screen.dart';
 import 'package:avid_frontend/screens/welcome/components/welcome_bg.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 
 class WelcomeBody extends StatelessWidget {
   @override
@@ -19,7 +22,7 @@ class WelcomeBody extends StatelessWidget {
               bgColor: kWhiteColor,
               textColor: kPrimaryColor,
               onPressed: () {
-                Navigator.pushNamed(context, '/login');
+                Navigator.push(context, PageTransition(child: LoginScreen(), type: PageTransitionType.rightToLeftWithFade));
               },
             ),
             SizedBox(height: size.height * 0.03),
@@ -29,7 +32,7 @@ class WelcomeBody extends StatelessWidget {
               borderColor: kWhiteColor,
               textColor: kWhiteColor,
               onPressed: () {
-                Navigator.pushNamed(context, '/register');
+                Navigator.push(context, PageTransition(child: RegScreen(), type: PageTransitionType.rightToLeftWithFade));
               },
             ),
             SizedBox(height: size.height * 0.1),

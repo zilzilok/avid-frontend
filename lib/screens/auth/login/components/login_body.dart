@@ -2,8 +2,10 @@ import 'package:avid_frontend/res/constants.dart';
 import 'package:avid_frontend/screens/auth/components/already_have_an_account_check.dart';
 import 'package:avid_frontend/screens/auth/login/components/login_bg.dart';
 import 'package:avid_frontend/screens/auth/login/components/login_form_page.dart';
+import 'package:avid_frontend/screens/auth/reg/reg_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:page_transition/page_transition.dart';
 
 class LoginBody extends StatelessWidget {
   @override
@@ -22,15 +24,6 @@ class LoginBody extends StatelessWidget {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                IconButton(
-                  icon: const Icon(Icons.arrow_back_sharp),
-                  color: kPrimaryColor,
-                  iconSize: 40,
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  padding: EdgeInsets.only(top: 10),
-                ),
                 Text(
                   "авторизация",
                   style: GoogleFonts.montserrat(
@@ -46,10 +39,20 @@ class LoginBody extends StatelessWidget {
             SizedBox(height: size.height * 0.03),
             AlreadyHaveAnAccountCheck(
               onPressed: () {
-                Navigator.popAndPushNamed(context, "/register");
+                Navigator.pop(context);
+                Navigator.push(context, PageTransition(child: RegScreen(), type: PageTransitionType.rightToLeftWithFade));
               },
             ),
             SizedBox(height: size.height * 0.05),
+            IconButton(
+              icon: const Icon(Icons.arrow_back_sharp),
+              color: kPrimaryColor,
+              iconSize: 40,
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              padding: EdgeInsets.only(bottom: 10),
+            ),
           ],
         ),
       ),

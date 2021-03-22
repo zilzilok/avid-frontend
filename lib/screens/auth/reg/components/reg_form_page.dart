@@ -1,12 +1,16 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:avid_frontend/components/app_utils.dart';
 import 'package:avid_frontend/components/rounded_button.dart';
+import 'package:avid_frontend/res/constants.dart';
 import 'package:avid_frontend/screens/auth/api/auth_api.dart';
 import 'package:avid_frontend/screens/auth/components/input_field.dart';
 import 'package:avid_frontend/screens/auth/components/password_field.dart';
 import 'package:avid_frontend/screens/auth/components/validator.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 class RegFormPage extends StatefulWidget {
   @override
@@ -18,7 +22,9 @@ class _RegFormPage extends State<RegFormPage> {
   TextEditingController _mPasswordController = TextEditingController();
   TextEditingController _loginController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
+  final RoundedLoadingButtonController _btnController = new RoundedLoadingButtonController();
   final _formkey = GlobalKey<FormState>();
+  final double _buttonFontSize = 18;
 
   @override
   void dispose() {
@@ -66,8 +72,13 @@ class _RegFormPage extends State<RegFormPage> {
               },
             ),
             SizedBox(height: size.height * 0.03),
-            RoundedButton(
-              text: "продолжить",
+            RoundedLoadingButton(
+              height: _buttonFontSize + 40,
+              controller: _btnController,
+              borderRadius: 29,
+              color: kPrimaryColor,
+              errorColor: Colors.red,
+              successColor: Colors.green,
               onPressed: () async {
                 if (_formkey.currentState.validate()) {
                   var username = _loginController.text;
@@ -77,17 +88,43 @@ class _RegFormPage extends State<RegFormPage> {
                   var statusCode = await AuthApi.attemptRegister(
                       username, email, password, matchingPassword);
                   if (statusCode == HttpStatus.ok) {
+                    _btnController.success();
                     AppUtils.displayDialog(context, "Поздравляем!",
                         "Аккаунт успешно зарегистрирован.");
-                    Navigator.popAndPushNamed(context, '/login');
+                    Timer(Duration(seconds: 1), () {
+                      _btnController.reset();
+                      // Navigator.popAndPushNamed(context, '/login');
+                    });
                   } else if (statusCode == HttpStatus.conflict) {
+                    _btnController.error();
                     AppUtils.displayDialog(context, "Ошибка!",
                         "Аккаунт с такой почтой или логином уже существует.");
+                    Timer(Duration(seconds: 1), () {
+                      _btnController.reset();
+                    });
                   } else {
+                    _btnController.error();
                     AppUtils.displayDialog(context, "Ошибка регистрации!", "");
+                    Timer(Duration(seconds: 1), () {
+                      _btnController.reset();
+                    });
                   }
                 }
+                else {
+                  _btnController.error();
+                  Timer(Duration(seconds: 1), () {
+                    _btnController.reset();
+                  });
+                }
               },
+              child: Text(
+                "продолжить",
+                style: GoogleFonts.montserrat(
+                  color: kWhiteColor,
+                  fontSize: _buttonFontSize,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
             ),
           ],
         ),

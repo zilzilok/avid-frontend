@@ -41,6 +41,14 @@ dependencies:
   flutter_launcher_icons: ^0.8.1
   # launch name
   flutter_launcher_name: ^0.0.1
+  # Better page transitions
+  page_transition: ^1.1.7+6
+  # Fast app restart
+  flutter_phoenix: ^1.0.0
+  # Loading button
+  rounded_loading_button: ^1.0.0
+  # Check internet connection
+  connectivity: ^3.0.3
 
 flutter_launcher_name:
   name: "AviD"

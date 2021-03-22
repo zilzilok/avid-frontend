@@ -23,33 +23,27 @@ class RoundedButton extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Container(
-        width: size.width * 0.7,
-        child: Container(
-          decoration: borderColor != null
-              ? BoxDecoration(
-                  border: Border.all(width: 1, color: borderColor),
-                  borderRadius: BorderRadius.all(Radius.circular(29)),
-                )
-              : null,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(29),
-            child: TextButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(bgColor),
-                padding: MaterialStateProperty.all(
-                    EdgeInsets.symmetric(vertical: 17, horizontal: 20)),
-              ),
-              onPressed: onPressed,
-              child: Text(
-                text,
-                style: GoogleFonts.montserrat(
-                  color: textColor,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
+      width: size.width * 0.7,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          primary: bgColor,
+          padding: EdgeInsets.symmetric(vertical: 17, horizontal: 20),
+          side: borderColor != null
+              ? BorderSide(color: borderColor, width: 1)
+              : BorderSide.none,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(29))),
+        ),
+        child: Text(
+          text,
+          style: GoogleFonts.montserrat(
+            color: textColor,
+            fontSize: 18,
+            fontWeight: FontWeight.w500,
           ),
-        ));
+        ),
+        onPressed: onPressed,
+      ),
+    );
   }
 }

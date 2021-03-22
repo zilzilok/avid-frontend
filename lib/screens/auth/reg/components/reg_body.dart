@@ -1,9 +1,11 @@
 import 'package:avid_frontend/res/constants.dart';
 import 'package:avid_frontend/screens/auth/components/already_have_an_account_check.dart';
+import 'package:avid_frontend/screens/auth/login/login_screen.dart';
 import 'package:avid_frontend/screens/auth/reg/components/reg_bg.dart';
 import 'package:avid_frontend/screens/auth/reg/components/reg_form_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:page_transition/page_transition.dart';
 
 class RegBody extends StatelessWidget {
   @override
@@ -22,15 +24,6 @@ class RegBody extends StatelessWidget {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                IconButton(
-                  icon: const Icon(Icons.arrow_back_sharp),
-                  color: kPrimaryColor,
-                  iconSize: 40,
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  padding: EdgeInsets.only(top: 10),
-                ),
                 Text(
                   "регистрация",
                   style: GoogleFonts.montserrat(
@@ -47,10 +40,20 @@ class RegBody extends StatelessWidget {
             AlreadyHaveAnAccountCheck(
               login: false,
               onPressed: () {
-                Navigator.popAndPushNamed(context, "/login");
+                Navigator.pop(context);
+                Navigator.push(context, PageTransition(child: LoginScreen(), type: PageTransitionType.rightToLeftWithFade));
               },
             ),
             SizedBox(height: size.height * 0.05),
+            IconButton(
+              icon: const Icon(Icons.arrow_back_sharp),
+              color: kPrimaryColor,
+              iconSize: 40,
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              padding: EdgeInsets.only(bottom: 10),
+            ),
           ],
         ),
       ),

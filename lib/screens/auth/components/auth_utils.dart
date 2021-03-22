@@ -27,7 +27,7 @@ class AuthUtils {
   }
 
   static void deleteJwt() {
-    _storage.delete(key: "jwt");
+    _storage.write(key: "jwt", value: null);
   }
 }
 

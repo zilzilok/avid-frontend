@@ -1,17 +1,19 @@
 import 'package:avid_frontend/res/constants.dart';
 import 'package:avid_frontend/screens/auth/components/auth_utils.dart';
 import 'package:avid_frontend/screens/auth/login/login_screen.dart';
-import 'package:avid_frontend/screens/auth/reg/reg_screen.dart';
 import 'package:avid_frontend/screens/main/app.dart';
-import 'package:avid_frontend/screens/main/profile/profile_screen.dart';
-import 'package:avid_frontend/screens/other/error_screen.dart';
 import 'package:avid_frontend/screens/other/load/load_screen.dart';
 import 'package:avid_frontend/screens/welcome/welcome_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
+
+import 'file:///C:/sharaga/java/avid/avid_frontend/lib/screens/other/error/error_screen.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(Phoenix(
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -27,11 +29,6 @@ class MyApp extends StatelessWidget {
         primarySwatch: kPrimaryColor,
         scaffoldBackgroundColor: kWhiteColor,
       ),
-      routes: <String, WidgetBuilder>{
-        '/login': (BuildContext context) => LoginScreen(),
-        '/register': (BuildContext context) => RegScreen(),
-        '/profile': (BuildContext context) => ProfileScreen(),
-      },
       home: FutureBuilder(
         future: AuthUtils.checkJwt,
         builder: (context, snapshot) {
