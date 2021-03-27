@@ -34,6 +34,9 @@ const kPrimaryAccentColor = const MaterialColor(
 
 const kPrimaryLightColor = Color(0xFFFEA300);
 
+const kTextGreyColor = Color(0x802D1D09);
+const kLightGreyColor = Color(0xFFF9F5F2);
+
 const kBackgroundColor = Colors.white;
 
 const kWhiteColor = Color(0xFFFFFCF9);

@@ -1,5 +1,6 @@
-import 'package:avid_frontend/screens/auth/reg/components/reg_body.dart';
 import 'package:flutter/material.dart';
+
+import 'components/reg_body.dart';
 
 class RegScreen extends StatelessWidget {
   @override

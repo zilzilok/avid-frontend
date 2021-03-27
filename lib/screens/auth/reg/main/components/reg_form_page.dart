@@ -2,11 +2,10 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:avid_frontend/components/app_utils.dart';
-import 'package:avid_frontend/components/rounded_button.dart';
 import 'package:avid_frontend/res/constants.dart';
 import 'package:avid_frontend/screens/auth/api/auth_api.dart';
-import 'package:avid_frontend/screens/auth/components/input_field.dart';
-import 'package:avid_frontend/screens/auth/components/password_field.dart';
+import 'package:avid_frontend/screens/auth/components/fields/input_field.dart';
+import 'package:avid_frontend/screens/auth/components/fields/password_field.dart';
 import 'package:avid_frontend/screens/auth/components/validator.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -22,7 +21,8 @@ class _RegFormPage extends State<RegFormPage> {
   TextEditingController _mPasswordController = TextEditingController();
   TextEditingController _loginController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
-  final RoundedLoadingButtonController _btnController = new RoundedLoadingButtonController();
+  final RoundedLoadingButtonController _btnController =
+      new RoundedLoadingButtonController();
   final _formkey = GlobalKey<FormState>();
   final double _buttonFontSize = 18;
 
@@ -89,28 +89,25 @@ class _RegFormPage extends State<RegFormPage> {
                       username, email, password, matchingPassword);
                   if (statusCode == HttpStatus.ok) {
                     _btnController.success();
-                    AppUtils.displayDialog(context, "Поздравляем!",
-                        "Аккаунт успешно зарегистрирован.");
                     Timer(Duration(seconds: 1), () {
                       _btnController.reset();
                       // Navigator.popAndPushNamed(context, '/login');
                     });
                   } else if (statusCode == HttpStatus.conflict) {
                     _btnController.error();
-                    AppUtils.displayDialog(context, "Ошибка!",
+                    AppUtils.displaySnackBar(context,
                         "Аккаунт с такой почтой или логином уже существует.");
                     Timer(Duration(seconds: 1), () {
                       _btnController.reset();
                     });
                   } else {
                     _btnController.error();
-                    AppUtils.displayDialog(context, "Ошибка регистрации!", "");
+                    AppUtils.displaySnackBar(context, "Ошибка регистрации!");
                     Timer(Duration(seconds: 1), () {
                       _btnController.reset();
                     });
                   }
-                }
-                else {
+                } else {
                   _btnController.error();
                   Timer(Duration(seconds: 1), () {
                     _btnController.reset();
@@ -118,7 +115,7 @@ class _RegFormPage extends State<RegFormPage> {
                 }
               },
               child: Text(
-                "продолжить",
+                "создать аккаунт",
                 style: GoogleFonts.montserrat(
                   color: kWhiteColor,
                   fontSize: _buttonFontSize,

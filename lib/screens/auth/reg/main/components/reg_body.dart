@@ -1,18 +1,17 @@
 import 'package:avid_frontend/res/constants.dart';
 import 'package:avid_frontend/screens/auth/components/already_have_an_account_check.dart';
-import 'package:avid_frontend/screens/auth/login/components/login_bg.dart';
-import 'package:avid_frontend/screens/auth/login/components/login_form_page.dart';
+import 'package:avid_frontend/screens/auth/login/login_screen.dart';
+import 'package:avid_frontend/screens/auth/reg/main/components/reg_bg.dart';
+import 'package:avid_frontend/screens/auth/reg/main/components/reg_form_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
 
-import 'file:///C:/sharaga/java/avid/avid_frontend/lib/screens/auth/reg/main/reg_screen.dart';
-
-class LoginBody extends StatelessWidget {
+class RegBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return LoginBackground(
+    return RegBackground(
       child: Container(
         width: size.width,
         decoration: BoxDecoration(
@@ -23,24 +22,30 @@ class LoginBody extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text(
-                "авторизация",
-                style: GoogleFonts.montserrat(
-                  fontWeight: FontWeight.bold,
-                  color: kPrimaryColor,
-                  fontSize: 20,
-                ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "регистрация",
+                    style: GoogleFonts.montserrat(
+                      fontWeight: FontWeight.bold,
+                      color: kPrimaryColor,
+                      fontSize: 20,
+                    ),
+                  ),
+                ],
               ),
               SizedBox(height: size.height * 0.03),
-              LoginFormPage(),
+              RegFormPage(),
               SizedBox(height: size.height * 0.03),
               AlreadyHaveAnAccountCheck(
+                login: false,
                 onPressed: () {
                   Navigator.pop(context);
                   Navigator.push(
                       context,
                       PageTransition(
-                          child: RegScreen(),
+                          child: LoginScreen(),
                           type: PageTransitionType.rightToLeftWithFade));
                 },
               ),

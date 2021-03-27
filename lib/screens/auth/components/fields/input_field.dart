@@ -27,6 +27,8 @@ class InputField extends StatelessWidget {
         validator: validator,
         decoration: InputDecoration(
           hintText: hintText,
+          hintStyle:
+              GoogleFonts.montserrat(fontSize: 16, color: kTextGreyColor),
           enabledBorder: UnderlineInputBorder(
               borderSide: BorderSide(width: 1, color: kPrimaryLightColor)),
           focusedBorder: UnderlineInputBorder(
@@ -37,7 +39,7 @@ class InputField extends StatelessWidget {
               borderSide: BorderSide(width: 1, color: kPrimaryAccentColor)),
           errorStyle: GoogleFonts.montserrat(fontSize: 14),
         ),
-        style: GoogleFonts.montserrat(fontSize: 16),
+        style: GoogleFonts.montserrat(fontSize: 16, color: kTextGreyColor),
       ),
     );
   }

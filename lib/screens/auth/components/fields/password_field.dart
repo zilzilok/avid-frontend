@@ -48,7 +48,7 @@ class _PasswordFieldState extends State<PasswordField> {
         // cursorColor: kPrimaryColor,
         controller: controller,
         validator: validator,
-        style: GoogleFonts.montserrat(fontSize: 16),
+        style: GoogleFonts.montserrat(fontSize: 16, color: kTextGreyColor),
         decoration: InputDecoration(
           enabledBorder: UnderlineInputBorder(
               borderSide: BorderSide(width: 1, color: kPrimaryLightColor)),
@@ -60,6 +60,8 @@ class _PasswordFieldState extends State<PasswordField> {
               borderSide: BorderSide(width: 1, color: kPrimaryAccentColor)),
           errorStyle: GoogleFonts.montserrat(fontSize: 14),
           hintText: hintText,
+          hintStyle:
+              GoogleFonts.montserrat(fontSize: 16, color: kTextGreyColor),
           suffixIcon: InkWell(
             child: Icon(
               _passwordVisible ? Icons.visibility : Icons.visibility_off,

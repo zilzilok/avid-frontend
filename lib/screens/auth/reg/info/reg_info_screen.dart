@@ -1,16 +1,17 @@
-import 'package:avid_frontend/screens/auth/login/components/login_body.dart';
+import 'package:avid_frontend/screens/auth/reg/info/components/reg_info_body.dart';
 import 'package:flutter/material.dart';
 
-class LoginScreen extends StatelessWidget {
+
+class RegInfoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: true,
+      resizeToAvoidBottomInset: false,
       body: GestureDetector(
         onTap: () {
           FocusScope.of(context).requestFocus(FocusNode());
         },
-        child: LoginBody(),
+        child: RegInfoBody(),
       ),
     );
   }
