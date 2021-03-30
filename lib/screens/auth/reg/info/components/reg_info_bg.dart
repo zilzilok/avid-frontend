@@ -20,7 +20,7 @@ class RegInfoBackground extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage("assets/images/reg_info_bg.png"),
+                image: AssetImage("assets/images/auth/backgrounds/reg_info_bg.png"),
                 fit: BoxFit.cover,
               ),
             ),

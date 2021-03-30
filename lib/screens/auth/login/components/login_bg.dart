@@ -20,7 +20,7 @@ class LoginBackground extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage("assets/images/login_bg.png"),
+                image: AssetImage("assets/images/auth/backgrounds/login_bg.png"),
                 fit: BoxFit.cover,
               ),
             ),

@@ -20,7 +20,7 @@ class WelcomeBackground extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage("assets/images/welcome_bg.png"),
+                image: AssetImage("assets/images/auth/backgrounds/welcome_bg.png"),
                 fit: BoxFit.cover,
               ),
             ),
