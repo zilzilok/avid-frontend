@@ -16,7 +16,7 @@ class RegInfoBody extends StatelessWidget {
                 topLeft: Radius.circular(50), topRight: Radius.circular(50))),
         child: SafeArea(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               SizedBox(height: size.height * 0.03),
               RegInfoFormPage(),

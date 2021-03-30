@@ -21,8 +21,9 @@ class LoginBody extends StatelessWidget {
                 topLeft: Radius.circular(50), topRight: Radius.circular(50))),
         child: SafeArea(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
+              SizedBox(height: size.height * 0.01),
               Text(
                 "авторизация",
                 style: GoogleFonts.montserrat(

@@ -88,6 +88,11 @@ flutter:
   assets:
     - assets/images/
     - assets/images/splash/
+    - assets/images/auth/
+    - assets/images/auth/backgrounds/
+    - assets/images/main/
+    - assets/images/main/backgrounds/
+    - assets/images/splash/
     - assets/icons/
 
   # An image asset can refer to one or more resolution-specific "variants", see

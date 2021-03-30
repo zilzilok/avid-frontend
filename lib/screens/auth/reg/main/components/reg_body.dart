@@ -20,20 +20,16 @@ class RegBody extends StatelessWidget {
                 topLeft: Radius.circular(50), topRight: Radius.circular(50))),
         child: SafeArea(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "регистрация",
-                    style: GoogleFonts.montserrat(
-                      fontWeight: FontWeight.bold,
-                      color: kPrimaryColor,
-                      fontSize: 20,
-                    ),
-                  ),
-                ],
+              SizedBox(height: size.height * 0.01),
+              Text(
+                "регистрация",
+                style: GoogleFonts.montserrat(
+                  fontWeight: FontWeight.bold,
+                  color: kPrimaryColor,
+                  fontSize: 20,
+                ),
               ),
               SizedBox(height: size.height * 0.03),
               RegFormPage(),
