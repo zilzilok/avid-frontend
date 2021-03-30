@@ -9,9 +9,10 @@ import 'package:intl/intl.dart';
 
 class DateField extends StatefulWidget {
   final TextEditingController dateController;
+  static final DateFormat SQL_DATE_FORMAT = DateFormat("yyyy-MM-dd");
   static final DateFormat DATE_FORMAT = DateFormat("dd.MM.yyyy");
 
-  const DateField({Key key, this.dateController}) : super(key: key);
+  DateField({Key key, this.dateController}) : super(key: key);
 
   @override
   _DateFieldState createState() => _DateFieldState(this.dateController);
@@ -19,12 +20,14 @@ class DateField extends StatefulWidget {
 
 class _DateFieldState extends State<DateField> {
   final TextEditingController dateController;
+  DateTime _currDate;
 
   _DateFieldState(this.dateController);
 
   @override
   void initState() {
-    dateController.text = DateField.DATE_FORMAT.format(DateTime.now());
+    _currDate = DateTime.now();
+    dateController.text = DateField.DATE_FORMAT.format(_currDate);
     super.initState();
   }
 
@@ -48,16 +51,17 @@ class _DateFieldState extends State<DateField> {
             },
             onConfirm: (date) {
               setState(() {
-                dateController.text = DateField.DATE_FORMAT.format(date);
+                _currDate = date;
+                dateController.text = DateField.SQL_DATE_FORMAT.format(_currDate);
               });
               log('confirm $date');
             },
-            currentTime: DateTime.now(),
+            currentTime: _currDate,
             locale: LocaleType.ru,
           );
         },
         child: Text(
-          dateController.text,
+          DateField.DATE_FORMAT.format(_currDate),
           style: GoogleFonts.montserrat(fontSize: 20, color: kTextGreyColor),
         ),
       ),

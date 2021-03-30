@@ -11,6 +11,16 @@ class AuthUtils {
     return jwt;
   }
 
+  static Future<String> checkAndGetJwt() async {
+    var jwt = await getJwt();
+    if (jwt == null) {
+      return null;
+    }
+
+    var attemptRes = await AuthApi.attempt(jwt);
+    return attemptRes ? jwt : null;
+  }
+
   static Future<JwtStatus> get checkJwt async {
     var jwt = await getJwt();
     if (jwt == null) {

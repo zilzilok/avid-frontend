@@ -4,11 +4,15 @@ import 'dart:io';
 import 'package:avid_frontend/components/app_utils.dart';
 import 'package:avid_frontend/res/constants.dart';
 import 'package:avid_frontend/screens/auth/api/auth_api.dart';
+import 'package:avid_frontend/screens/auth/components/auth_utils.dart';
 import 'package:avid_frontend/screens/auth/components/fields/input_field.dart';
 import 'package:avid_frontend/screens/auth/components/fields/password_field.dart';
 import 'package:avid_frontend/screens/auth/components/validator.dart';
+import 'package:avid_frontend/screens/auth/reg/info/reg_info_screen.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 class RegFormPage extends StatefulWidget {
@@ -81,28 +85,48 @@ class _RegFormPage extends State<RegFormPage> {
               successColor: Colors.green,
               onPressed: () async {
                 if (_formkey.currentState.validate()) {
-                  var username = _loginController.text;
-                  var email = _emailController.text;
-                  var password = _passwordController.text;
-                  var matchingPassword = _mPasswordController.text;
-                  var statusCode = await AuthApi.attemptRegister(
-                      username, email, password, matchingPassword);
-                  if (statusCode == HttpStatus.ok) {
-                    _btnController.success();
-                    Timer(Duration(seconds: 1), () {
-                      _btnController.reset();
-                      // Navigator.popAndPushNamed(context, '/login');
-                    });
-                  } else if (statusCode == HttpStatus.conflict) {
-                    _btnController.error();
-                    AppUtils.displaySnackBar(context,
-                        "Аккаунт с такой почтой или логином уже существует.");
-                    Timer(Duration(seconds: 1), () {
-                      _btnController.reset();
-                    });
+                  var connectivityResult =
+                      await Connectivity().checkConnectivity();
+
+                  if (connectivityResult != ConnectivityResult.none) {
+                    var username = _loginController.text.trim();
+                    var email = _emailController.text.trim();
+                    var password = _passwordController.text;
+                    var matchingPassword = _mPasswordController.text;
+                    var statusCode = await AuthApi.attemptRegister(
+                        username, email, password, matchingPassword);
+                    if (statusCode == HttpStatus.ok) {
+                      _btnController.success();
+                      var jwt = await AuthApi.attemptAuth(username, password);
+                      AuthUtils.saveJwt(jwt);
+                      Timer(Duration(seconds: 1), () {
+                        _btnController.reset();
+                        Navigator.popUntil(context, (route) => route.isFirst);
+                        Navigator.pop(context);
+                        Navigator.push(
+                            context,
+                            PageTransition(
+                                child: RegInfoScreen(),
+                                type: PageTransitionType.fade));
+                      });
+                    } else if (statusCode == HttpStatus.conflict) {
+                      _btnController.error();
+                      AppUtils.displaySnackBar(context,
+                          "Аккаунт с такой почтой или логином уже существует.");
+                      Timer(Duration(seconds: 1), () {
+                        _btnController.reset();
+                      });
+                    } else {
+                      _btnController.error();
+                      AppUtils.displaySnackBar(context, "Ошибка регистрации!");
+                      Timer(Duration(seconds: 1), () {
+                        _btnController.reset();
+                      });
+                    }
                   } else {
                     _btnController.error();
-                    AppUtils.displaySnackBar(context, "Ошибка регистрации!");
+                    AppUtils.displaySnackBar(
+                        context, "Отсутствует подключение к интернету.");
                     Timer(Duration(seconds: 1), () {
                       _btnController.reset();
                     });

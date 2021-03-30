@@ -1,15 +1,24 @@
+import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:avid_frontend/components/app_utils.dart';
 import 'package:avid_frontend/res/constants.dart';
+import 'package:avid_frontend/screens/auth/api/user_api.dart';
+import 'package:avid_frontend/screens/auth/components/auth_utils.dart';
 import 'package:avid_frontend/screens/auth/components/fields/avatar_field.dart';
 import 'package:avid_frontend/screens/auth/components/fields/date_field.dart';
 import 'package:avid_frontend/screens/auth/components/fields/gender_field.dart';
 import 'package:avid_frontend/screens/auth/components/fields/input_field.dart';
 import 'package:avid_frontend/screens/auth/components/validator.dart';
+import 'package:avid_frontend/screens/auth/login/login_screen.dart';
+import 'package:avid_frontend/screens/main/app.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 class RegInfoFormPage extends StatefulWidget {
@@ -56,12 +65,12 @@ class _RegInfoFormPage extends State<RegInfoFormPage> {
             InputField(
               hintText: "имя",
               controller: _firstNameController,
-              validator: Validator.login(),
+              validator: Validator.notEmpty(),
             ),
             InputField(
               hintText: "фамилия",
               controller: _secondNameController,
-              validator: Validator.email(),
+              validator: Validator.notEmpty(),
             ),
             Text(
               "дата рождения",
@@ -82,12 +91,67 @@ class _RegInfoFormPage extends State<RegInfoFormPage> {
               errorColor: Colors.red,
               successColor: Colors.green,
               onPressed: () async {
-                log(_firstNameController.text);
-                log(_secondNameController.text);
-                log(_genderController.text);
-                log(_dateController.text);
-                log(_imageController.text);
-                _btnController.reset();
+                var firstName = _firstNameController.text.trim();
+                var secondName = _secondNameController.text.trim();
+                var gender =
+                    _genderController.text == "муж." ? "MALE" : "FEMALE";
+                var date = _dateController.text;
+                var fileName = _imageController.text;
+
+                log(firstName);
+                log(secondName);
+                log(gender);
+                log(date);
+                log(fileName);
+
+                if (_formkey.currentState.validate()) {
+                  var connectivityResult =
+                      await Connectivity().checkConnectivity();
+
+                  if (connectivityResult != ConnectivityResult.none) {
+                    var statusCode;
+                    try{
+                       statusCode = await UserApi.updateUserInfo(
+                          firstName, secondName, gender, date, fileName);
+                    }catch(e){
+                      log(e.toString());
+                      AuthUtils.deleteJwt();
+                      Phoenix.rebirth(context);
+                    }
+
+                    if (statusCode == HttpStatus.ok) {
+                      _btnController.success();
+                      Timer(Duration(seconds: 1), () {
+                        _btnController.reset();
+                        Navigator.pop(context);
+                        Navigator.push(
+                            context,
+                            PageTransition(
+                                child: AppScreen(),
+                                type: PageTransitionType.fade));
+                      });
+                    } else {
+                      _btnController.error();
+                      AppUtils.displaySnackBar(context, "Ошибка добавления информации!");
+                      Timer(Duration(seconds: 1), () {
+                        _btnController.reset();
+                      });
+                    }
+                  } else {
+                    _btnController.error();
+                    AppUtils.displaySnackBar(
+                        context, "Отсутствует подключение к интернету.");
+                    Timer(Duration(seconds: 1), () {
+                      _btnController.reset();
+                    });
+                  }
+                  _btnController.reset();
+                } else {
+                  _btnController.error();
+                  Timer(Duration(seconds: 1), () {
+                    _btnController.reset();
+                  });
+                }
               },
               child: Text(
                 "продолжить",

@@ -1,14 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:avid_frontend/screens/auth/api/api_info.dart';
 import 'package:http/http.dart' as http;
 
 class AuthApi {
-  static const String BASE_URL = "avid-rest-api.herokuapp.com";
-
   static Future<String> attemptAuth(String username, String password) async {
     var res = await http.post(
-      Uri.https(BASE_URL, "/auth"),
+      Uri.https(ApiInfo.BASE_URL, "/auth"),
       headers: {
         "content-type": "application/json",
       },
@@ -26,7 +25,7 @@ class AuthApi {
   static Future<int> attemptRegister(String username, String email,
       String password, String matchingPassword) async {
     var res = await http.post(
-      Uri.https(BASE_URL, "/registration"),
+      Uri.https(ApiInfo.BASE_URL, "/registration"),
       headers: {
         "content-type": "application/json",
       },
@@ -42,7 +41,7 @@ class AuthApi {
 
   static Future<bool> attempt(String jwt) async {
     var res = await http.get(
-      Uri.https(BASE_URL, "/users"),
+      Uri.https(ApiInfo.BASE_URL, "/users"),
       headers: {
         "content-type": "application/json",
         "authorization": "Bearer $jwt",
