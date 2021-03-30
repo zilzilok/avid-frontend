@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+import 'package:avid_frontend/screens/main/profile/components/user_dto.dart';
 import 'package:http/http.dart' as http;
 
 import 'api_info.dart';
@@ -18,7 +19,7 @@ class UserApi {
     Map<String, String> bodyMap = {
       "firstName": firstName,
       "secondName": secondName,
-      "birthdate" : date,
+      "birthdate": date,
       "gender": gender,
     };
 
@@ -26,7 +27,7 @@ class UserApi {
     if (fileName != null && fileName.isNotEmpty) {
       photoPath = await saveAvatar(fileName);
       if (photoPath != null) {
-        bodyMap.addAll({"photoPath" : photoPath});
+        bodyMap.addAll({"photoPath": photoPath});
       }
     }
 
@@ -57,5 +58,22 @@ class UserApi {
       return res.body;
     }
     return null;
+  }
+
+  static Future<Map<String, dynamic>> getProfileJson() async {
+    var headers;
+    try {
+      headers = await ApiInfo.defaultAuthorizationHeader();
+    } catch (e) {
+      throw e;
+    }
+
+    var res = await http.get(
+      Uri.https(ApiInfo.BASE_URL, "/user"),
+      headers: headers,
+    );
+    log(res.body);
+
+    return jsonDecode(res.body);
   }
 }
