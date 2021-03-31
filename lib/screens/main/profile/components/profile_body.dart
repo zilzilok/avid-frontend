@@ -41,7 +41,7 @@ class ProfileBody extends StatelessWidget {
                   child: Align(
                     alignment: Alignment.center,
                     child: Container(
-                      margin: EdgeInsets.symmetric(horizontal: size.width * 0.1),
+                      margin: EdgeInsets.symmetric(horizontal: size.width * 0.05),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[

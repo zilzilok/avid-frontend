@@ -13,7 +13,7 @@ class ApiInfo {
     }
 
     var headers = {
-      "content-type": "application/json",
+      "content-type": "application/json; charset=utf-8",
     };
     headers.addAll(authEntry);
 

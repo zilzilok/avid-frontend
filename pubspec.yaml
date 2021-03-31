@@ -60,6 +60,7 @@ dependencies:
   intl: ^0.17.0
   # image picker
   image_picker: ^0.6.7+22
+  flappy_search_bar: ^1.7.2
 
 flutter_launcher_name:
   name: "AviD"
