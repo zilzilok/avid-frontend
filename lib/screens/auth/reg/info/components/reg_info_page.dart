@@ -11,7 +11,6 @@ import 'package:avid_frontend/screens/auth/components/fields/date_field.dart';
 import 'package:avid_frontend/screens/auth/components/fields/gender_field.dart';
 import 'package:avid_frontend/screens/auth/components/fields/input_field.dart';
 import 'package:avid_frontend/screens/auth/components/validator.dart';
-import 'package:avid_frontend/screens/auth/login/login_screen.dart';
 import 'package:avid_frontend/screens/main/app.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';

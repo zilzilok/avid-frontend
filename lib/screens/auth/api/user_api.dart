@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
-import 'package:avid_frontend/screens/main/profile/components/user_dto.dart';
+
 import 'package:http/http.dart' as http;
 
 import 'api_info.dart';
