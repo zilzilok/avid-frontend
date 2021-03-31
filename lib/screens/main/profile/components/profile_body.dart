@@ -38,39 +38,42 @@ class ProfileBody extends StatelessWidget {
                         topLeft: Radius.circular(50),
                         topRight: Radius.circular(50))),
                 child: SafeArea(
-                  child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: size.width * 0.1),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        SizedBox(height: size.height * 0.01),
-                        Text(
-                          "Профиль",
-                          style: GoogleFonts.montserrat(
-                            fontWeight: FontWeight.bold,
-                            color: kPrimaryColor,
-                            fontSize: 20,
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: size.width * 0.1),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          SizedBox(height: size.height * 0.01),
+                          Text(
+                            "Профиль",
+                            style: GoogleFonts.montserrat(
+                              fontWeight: FontWeight.bold,
+                              color: kPrimaryColor,
+                              fontSize: 20,
+                            ),
                           ),
-                        ),
-                        SizedBox(height: size.height * 0.02),
-                        ProfileInfo(),
-                        SizedBox(height: size.height * 0.02),
-                        CustomButton(
-                          text: "друзья",
-                          onPressed: () {},
-                        ),
-                        CustomButton(
-                          text: "клубы",
-                          onPressed: () {},
-                        ),
-                        // RoundedButton(
-                        //   text: "Выйти из аккаунта",
-                        //   onPressed: () {
-                        //     AuthUtils.deleteJwt();
-                        //     Phoenix.rebirth(context);
-                        //   },
-                        // ),
-                      ],
+                          SizedBox(height: size.height * 0.02),
+                          ProfileInfo(),
+                          SizedBox(height: size.height * 0.02),
+                          CustomButton(
+                            text: "друзья",
+                            onPressed: () {},
+                          ),
+                          CustomButton(
+                            text: "клубы",
+                            onPressed: () {},
+                          ),
+                          // RoundedButton(
+                          //   text: "Выйти из аккаунта",
+                          //   onPressed: () {
+                          //     AuthUtils.deleteJwt();
+                          //     Phoenix.rebirth(context);
+                          //   },
+                          // ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
