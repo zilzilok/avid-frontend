@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:avid_frontend/res/constants.dart';
 import 'package:avid_frontend/screens/auth/api/game_api.dart';
 import 'package:avid_frontend/screens/main/search/components/search_bg.dart';
@@ -5,6 +6,8 @@ import 'package:flappy_search_bar/flappy_search_bar.dart';
 import 'package:flappy_search_bar/search_bar_style.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_html/style.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'category_button.dart';
@@ -82,7 +85,14 @@ class GameListTile extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 10),
       child: GestureDetector(
-        onTap: () {},
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) {
+              return GamePage(game: game);
+            }),
+          );
+        },
         child: Container(
           height: size.width * 0.3,
           decoration: BoxDecoration(
@@ -92,16 +102,19 @@ class GameListTile extends StatelessWidget {
             children: [
               Padding(
                 padding: EdgeInsets.all(10),
-                child: Container(
-                  alignment: Alignment.center,
-                  width: size.width * 0.2,
-                  height: size.width * 0.2,
-                  decoration: BoxDecoration(
-                      color: kWhiteColor,
-                      borderRadius: BorderRadius.all(Radius.circular(10))),
-                  child: Padding(
-                      padding: EdgeInsets.all(10),
-                      child: Image.network(game.imageURL)),
+                child: Hero(
+                  tag: game.alias,
+                  child: Container(
+                    alignment: Alignment.center,
+                    width: size.width * 0.2,
+                    height: size.width * 0.2,
+                    decoration: BoxDecoration(
+                        color: kWhiteColor,
+                        borderRadius: BorderRadius.all(Radius.circular(10))),
+                    child: Padding(
+                        padding: EdgeInsets.all(10),
+                        child: Image.network(game.imageURL)),
+                  ),
                 ),
               ),
               Expanded(
@@ -130,6 +143,71 @@ class GameListTile extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class GamePage extends StatelessWidget {
+  const GamePage({
+    Key key,
+    @required this.game,
+  }) : super(key: key);
+
+  final SearchGameResult game;
+
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            expandedHeight: size.height * 0.3,
+            floating: true,
+            flexibleSpace: Hero(
+              tag: game.alias,
+              child: FlexibleSpaceBar(
+                centerTitle: true,
+                title: ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: size.width * 0.8),
+                  child: AutoSizeText(
+                    game.title,
+                    maxLines: 1,
+                    style: GoogleFonts.montserrat(),
+                  ),
+                ),
+                background: Container(
+                  color: kWhiteColor,
+                  padding: EdgeInsets.only(bottom: 50),
+                  child: Image.network(
+                    game.imageURL,
+                    fit: BoxFit.fitHeight,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          SliverList(
+              delegate: SliverChildListDelegate([
+            Container(
+              color: kLightGreyColor,
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: size.width * 0.03,
+                    vertical: size.width * 0.03),
+                child: Html(
+                  data: game.description,
+                  style: {
+                    'p': Style(color: Colors.black, fontSize: FontSize.large),
+                  },
+                  // style: ,
+                ),
+              ),
+            ),
+          ]))
+        ],
       ),
     );
   }
@@ -209,7 +287,8 @@ class SearchPlaceholder extends StatelessWidget {
                                   itemCount: games.length,
                                   itemBuilder: (context, index) {
                                     return Padding(
-                                      padding: const EdgeInsets.only(bottom: 10),
+                                      padding:
+                                          const EdgeInsets.only(bottom: 10),
                                       child: GameListTile(game: games[index]),
                                     );
                                   });

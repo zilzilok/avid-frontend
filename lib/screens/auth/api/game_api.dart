@@ -6,7 +6,8 @@ import 'package:avid_frontend/screens/auth/api/api_info.dart';
 import 'package:http/http.dart' as http;
 
 class GameApi {
-  static Future<List<SearchGameResult>> getSearchedGamesJson(String search) async {
+  static Future<List<SearchGameResult>> getSearchedGamesJson(
+      String search) async {
     var headers;
     try {
       headers = await ApiInfo.defaultAuthorizationHeader();
@@ -14,7 +15,8 @@ class GameApi {
       throw e;
     }
 
-    Uri uri = Uri.https(ApiInfo.BASE_URL, "/games/all", {"title" : search.trim()});
+    Uri uri =
+        Uri.https(ApiInfo.BASE_URL, "/games/all", {"title": search.trim()});
     log(uri.toString());
 
     var res = await http.get(
@@ -68,16 +70,31 @@ class SearchGameResult {
   final String title;
   final String imageURL;
   final String shortDescription;
+  final String description;
+  final int playersMin;
+  final int playersMax;
+  final int year;
 
   SearchGameResult(
-      {this.alias, this.title, this.imageURL, this.shortDescription});
+      {this.description,
+      this.playersMin,
+      this.playersMax,
+      this.year,
+      this.alias,
+      this.title,
+      this.imageURL,
+      this.shortDescription});
 
   factory SearchGameResult.fromJson(Map<String, dynamic> parsedJson) {
     return SearchGameResult(
       alias: parsedJson["alias"],
       title: parsedJson["titles"][0],
       shortDescription: parsedJson["descriptionShort"],
+      description: parsedJson["description"],
       imageURL: parsedJson["photoUrl"],
+      year: parsedJson["year"],
+      playersMin: parsedJson["playersMin"],
+      playersMax: parsedJson["playersMin"],
     );
   }
 }
