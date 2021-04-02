@@ -94,7 +94,7 @@ class SearchGameResult {
       imageURL: parsedJson["photoUrl"],
       year: parsedJson["year"],
       playersMin: parsedJson["playersMin"],
-      playersMax: parsedJson["playersMin"],
+      playersMax: parsedJson["playersMax"],
     );
   }
 }

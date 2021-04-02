@@ -1,4 +1,4 @@
-import 'package:auto_size_text/auto_size_text.dart';
+import 'package:avid_frontend/components/rounded_button.dart';
 import 'package:avid_frontend/res/constants.dart';
 import 'package:avid_frontend/screens/auth/api/game_api.dart';
 import 'package:avid_frontend/screens/main/search/components/search_bg.dart';
@@ -6,9 +6,8 @@ import 'package:flappy_search_bar/flappy_search_bar.dart';
 import 'package:flappy_search_bar/search_bar_style.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_html/style.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:html/parser.dart';
 
 import 'category_button.dart';
 
@@ -94,7 +93,7 @@ class GameListTile extends StatelessWidget {
           );
         },
         child: Container(
-          height: size.width * 0.3,
+          height: size.width * 0.33,
           decoration: BoxDecoration(
               color: kLightGreyColor,
               borderRadius: BorderRadius.all(Radius.circular(22))),
@@ -131,7 +130,6 @@ class GameListTile extends StatelessWidget {
                       Expanded(
                         child: Text(
                           game.shortDescription,
-                          textAlign: TextAlign.justify,
                           overflow: TextOverflow.fade,
                           style: GoogleFonts.montserrat(),
                         ),
@@ -161,55 +159,166 @@ class GamePage extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            expandedHeight: size.height * 0.3,
-            floating: true,
-            flexibleSpace: Hero(
-              tag: game.alias,
-              child: FlexibleSpaceBar(
-                centerTitle: true,
-                title: ConstrainedBox(
-                  constraints: BoxConstraints(maxWidth: size.width * 0.8),
-                  child: AutoSizeText(
-                    game.title,
-                    maxLines: 1,
-                    style: GoogleFonts.montserrat(),
-                  ),
-                ),
-                background: Container(
-                  color: kWhiteColor,
-                  padding: EdgeInsets.only(bottom: 50),
-                  child: Image.network(
-                    game.imageURL,
-                    fit: BoxFit.fitHeight,
+      body: SearchBackground(
+        child: SafeArea(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Container(
+                margin: EdgeInsets.only(top: 5, right: 5, bottom: 10),
+                width: size.width,
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: Icon(
+                      Icons.arrow_back_sharp,
+                      size: size.width * 0.1,
+                      color: kWhiteColor,
+                    ),
                   ),
                 ),
               ),
-            ),
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: kWhiteColor,
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(50),
+                          topRight: Radius.circular(50))),
+                  child: SafeArea(
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: Container(
+                        width: size.width * 0.9,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            SizedBox(height: size.height * 0.02),
+                            Container(
+                              height: size.height * 0.3,
+                              padding: EdgeInsets.symmetric(
+                                  vertical: size.height * 0.02),
+                              child: Image.network(
+                                game.imageURL,
+                                fit: BoxFit.fitHeight,
+                              ),
+                            ),
+                            Text(
+                              game.title,
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.montserrat(
+                                fontWeight: FontWeight.bold,
+                                color: kPrimaryColor,
+                                fontSize: 20,
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: size.height * 0.02),
+                              child: RoundedButton(
+                                widthPc: 0.8,
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 13, horizontal: 20),
+                                text: "добавить игру",
+                                onPressed: () {},
+                              ),
+                            ),
+                            Expanded(
+                              child: SingleChildScrollView(
+                                child: Padding(
+                                  padding: EdgeInsets.only(
+                                      bottom: size.height * 0.01),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            bottom: size.height * 0.01),
+                                        child: Text.rich(
+                                          TextSpan(
+                                            style: GoogleFonts.montserrat(
+                                                fontSize: 16),
+                                            children: <TextSpan>[
+                                              TextSpan(
+                                                text: "Год создания:\t",
+                                                style: GoogleFonts.montserrat(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              TextSpan(
+                                                  text: game.year.toString()),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            bottom: size.height * 0.01),
+                                        child: Text.rich(
+                                          TextSpan(
+                                            style: GoogleFonts.montserrat(
+                                                fontSize: 16),
+                                            children: <TextSpan>[
+                                              TextSpan(
+                                                text: "Количество игроков:\t",
+                                                style: GoogleFonts.montserrat(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              TextSpan(
+                                                  text: game.playersMin
+                                                      .toString()),
+                                              TextSpan(text: "-"),
+                                              TextSpan(
+                                                  text: game.playersMax
+                                                      .toString()),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            bottom: size.height * 0.01),
+                                        child: Text(
+                                          "Описание:",
+                                          style: GoogleFonts.montserrat(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                      ),
+                                      Text(_parseHtmlString(game.description),
+                                          style: GoogleFonts.montserrat(
+                                              fontSize: 16)),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-          SliverList(
-              delegate: SliverChildListDelegate([
-            Container(
-              color: kLightGreyColor,
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: size.width * 0.03,
-                    vertical: size.width * 0.03),
-                child: Html(
-                  data: game.description,
-                  style: {
-                    'p': Style(color: Colors.black, fontSize: FontSize.large),
-                  },
-                  // style: ,
-                ),
-              ),
-            ),
-          ]))
-        ],
+        ),
       ),
     );
+  }
+
+  String _parseHtmlString(String htmlString) {
+    final document = parse(htmlString);
+    final String parsedString = parse(document.body.text).documentElement.text;
+
+    return parsedString;
   }
 }
 
