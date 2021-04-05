@@ -15,8 +15,8 @@ class GameApi {
       throw e;
     }
 
-    Uri uri =
-        Uri.https(ApiInfo.BASE_URL, "/games/all", {"title": search.trim()});
+    Uri uri = Uri.https(ApiInfo.BASE_URL, "/games/all",
+        {"title": search.trim(), "byUser": "true"});
     log(uri.toString());
 
     var res = await http.get(
@@ -43,9 +43,8 @@ class GameApi {
       throw e;
     }
 
-    Uri uri = Uri.https(ApiInfo.BASE_URL, "/games/all", {
-      "limit": "3",
-    });
+    Uri uri = Uri.https(
+        ApiInfo.BASE_URL, "/games/all", {"limit": "3", "byUser": "true"});
     log(uri.toString());
 
     var res = await http.get(
@@ -74,27 +73,31 @@ class SearchGameResult {
   final int playersMin;
   final int playersMax;
   final int year;
+  bool has;
 
-  SearchGameResult(
-      {this.description,
-      this.playersMin,
-      this.playersMax,
-      this.year,
-      this.alias,
-      this.title,
-      this.imageURL,
-      this.shortDescription});
+  SearchGameResult({
+    this.description,
+    this.playersMin,
+    this.playersMax,
+    this.year,
+    this.alias,
+    this.title,
+    this.imageURL,
+    this.shortDescription,
+    this.has,
+  });
 
   factory SearchGameResult.fromJson(Map<String, dynamic> parsedJson) {
     return SearchGameResult(
-      alias: parsedJson["alias"],
-      title: parsedJson["titles"][0],
-      shortDescription: parsedJson["descriptionShort"],
-      description: parsedJson["description"],
-      imageURL: parsedJson["photoUrl"],
-      year: parsedJson["year"],
-      playersMin: parsedJson["playersMin"],
-      playersMax: parsedJson["playersMax"],
+      alias: parsedJson["boardGames"]["alias"],
+      title: parsedJson["boardGames"]["titles"][0],
+      shortDescription: parsedJson["boardGames"]["descriptionShort"],
+      description: parsedJson["boardGames"]["description"],
+      imageURL: parsedJson["boardGames"]["photoUrl"],
+      year: parsedJson["boardGames"]["year"],
+      playersMin: parsedJson["boardGames"]["playersMin"],
+      playersMax: parsedJson["boardGames"]["playersMax"],
+      has: parsedJson["has"],
     );
   }
 }

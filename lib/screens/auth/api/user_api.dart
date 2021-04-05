@@ -76,4 +76,38 @@ class UserApi {
 
     return jsonDecode(res.body);
   }
+
+  static Future<int> addGame(String alias) async {
+    var headers;
+    try {
+      headers = await ApiInfo.defaultAuthorizationHeader();
+    } catch (e) {
+      throw e;
+    }
+
+    var res = await http.get(
+      Uri.https(ApiInfo.BASE_URL, "user/games/add", {"alias": alias}),
+      headers: headers,
+    );
+    log(res.body);
+
+    return res.statusCode;
+  }
+
+  static Future<int> removeGame(String alias) async {
+    var headers;
+    try {
+      headers = await ApiInfo.defaultAuthorizationHeader();
+    } catch (e) {
+      throw e;
+    }
+
+    var res = await http.get(
+      Uri.https(ApiInfo.BASE_URL, "user/games/remove", {"alias": alias}),
+      headers: headers,
+    );
+    log(res.body);
+
+    return res.statusCode;
+  }
 }
