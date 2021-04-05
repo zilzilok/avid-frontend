@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
 import 'api_info.dart';
+import 'game_api.dart';
 
 class UserApi {
   static Future<int> updateUserInfo(String firstName, String secondName,
@@ -85,5 +86,31 @@ class UserApi {
     log(res.body);
 
     return res.statusCode;
+  }
+
+  static Future<List<GameResult>> getUserGamesJson() async {
+    var headers = await ApiInfo.defaultAuthorizationHeader();
+
+    Uri uri = Uri.https(ApiInfo.BASE_URL, "/user/games");
+
+    var res = await http.get(
+      uri,
+      headers: headers,
+    );
+
+    if (res.statusCode != HttpStatus.ok) {
+      return List.empty();
+    }
+
+    var body = utf8.decode(res.bodyBytes);
+    log(body);
+
+    Iterable iterableParsedJson = json.decode(body);
+
+    if (res.statusCode == HttpStatus.ok && iterableParsedJson.isNotEmpty) {
+      return List<GameResult>.from(
+          iterableParsedJson.map((game) => GameResult.fromJson(game)));
+    }
+    return List.empty();
   }
 }

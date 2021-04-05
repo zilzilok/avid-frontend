@@ -15,7 +15,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:html/parser.dart';
 
 class GamePage extends StatefulWidget {
-  final SearchGameResult game;
+  final GameResult game;
 
   const GamePage({
     Key key,
@@ -27,7 +27,7 @@ class GamePage extends StatefulWidget {
 }
 
 class _GamePageState extends State<GamePage> {
-  final SearchGameResult game;
+  final GameResult game;
 
   _GamePageState(this.game);
 

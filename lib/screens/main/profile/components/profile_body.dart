@@ -6,6 +6,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'games_page.dart';
+
 class ProfileBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -64,7 +66,12 @@ class ProfileBody extends StatelessWidget {
                           CustomButton(
                             text: "мои игры",
                             onPressed: () {
-                              
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) {
+                                  return GamesPage();
+                                }),
+                              );
                             },
                           ),
                           CustomButton(

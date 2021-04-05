@@ -62,7 +62,7 @@ class GameApi {
   }
 }
 
-class SearchGameResult {
+class GameResult {
   final String alias;
   final String title;
   final String imageURL;
@@ -73,7 +73,7 @@ class SearchGameResult {
   final int year;
   bool has;
 
-  SearchGameResult({
+  GameResult({
     this.description,
     this.playersMin,
     this.playersMax,
@@ -84,6 +84,44 @@ class SearchGameResult {
     this.shortDescription,
     this.has,
   });
+
+  factory GameResult.fromJson(Map<String, dynamic> parsedJson) {
+    return GameResult(
+      alias: parsedJson["alias"],
+      title: parsedJson["titles"][0],
+      shortDescription: parsedJson["descriptionShort"],
+      description: parsedJson["description"],
+      imageURL: parsedJson["photoUrl"],
+      year: parsedJson["year"],
+      playersMin: parsedJson["playersMin"],
+      playersMax: parsedJson["playersMax"],
+      has: true,
+    );
+  }
+}
+
+class SearchGameResult extends GameResult {
+  SearchGameResult({
+    String alias,
+    String title,
+    String imageURL,
+    String shortDescription,
+    String description,
+    int playersMin,
+    int playersMax,
+    int year,
+    bool has,
+  }) : super(
+          alias: alias,
+          title: title,
+          imageURL: imageURL,
+          shortDescription: shortDescription,
+          description: description,
+          playersMin: playersMin,
+          playersMax: playersMax,
+          year: year,
+          has: has,
+        );
 
   factory SearchGameResult.fromJson(Map<String, dynamic> parsedJson) {
     return SearchGameResult(

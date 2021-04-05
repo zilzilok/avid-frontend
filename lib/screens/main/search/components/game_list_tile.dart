@@ -11,7 +11,7 @@ class GameListTile extends StatelessWidget {
     @required this.game,
   }) : super(key: key);
 
-  final SearchGameResult game;
+  final GameResult game;
 
   @override
   Widget build(BuildContext context) {
