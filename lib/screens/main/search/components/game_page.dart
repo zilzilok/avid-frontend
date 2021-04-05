@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:avid_frontend/components/app_utils.dart';
@@ -117,13 +116,13 @@ class _GamePageState extends State<GamePage> {
                                                 .checkConnectivity();
                                         if (connectivityResult !=
                                             ConnectivityResult.none) {
-                                          var statusCode;
-                                          try {
-                                            statusCode =
-                                                await UserApi.removeGame(
-                                                    game.alias);
-                                          } catch (e) {
-                                            log(e.toString());
+                                          var statusCode =
+                                              await UserApi.removeGame(
+                                                  game.alias);
+                                          if (statusCode ==
+                                                  HttpStatus.forbidden ||
+                                              statusCode ==
+                                                  HttpStatus.unauthorized) {
                                             AuthUtils.deleteJwt();
                                             Phoenix.rebirth(context);
                                           }
@@ -157,15 +156,17 @@ class _GamePageState extends State<GamePage> {
                                                 .checkConnectivity();
                                         if (connectivityResult !=
                                             ConnectivityResult.none) {
-                                          var statusCode;
-                                          try {
-                                            statusCode = await UserApi.addGame(
-                                                game.alias);
-                                          } catch (e) {
-                                            log(e.toString());
+                                          var statusCode =
+                                              await UserApi.addGame(game.alias);
+
+                                          if (statusCode ==
+                                                  HttpStatus.forbidden ||
+                                              statusCode ==
+                                                  HttpStatus.unauthorized) {
                                             AuthUtils.deleteJwt();
                                             Phoenix.rebirth(context);
                                           }
+
                                           if (statusCode != HttpStatus.ok) {
                                             setState(() {
                                               game.has = false;

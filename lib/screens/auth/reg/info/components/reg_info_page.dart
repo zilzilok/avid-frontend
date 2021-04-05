@@ -108,12 +108,11 @@ class _RegInfoFormPage extends State<RegInfoFormPage> {
                       await Connectivity().checkConnectivity();
 
                   if (connectivityResult != ConnectivityResult.none) {
-                    var statusCode;
-                    try{
-                       statusCode = await UserApi.updateUserInfo(
-                          firstName, secondName, gender, date, fileName);
-                    }catch(e){
-                      log(e.toString());
+                    var statusCode = await UserApi.updateUserInfo(
+                        firstName, secondName, gender, date, fileName);
+
+                    if (statusCode == HttpStatus.forbidden ||
+                        statusCode == HttpStatus.unauthorized) {
                       AuthUtils.deleteJwt();
                       Phoenix.rebirth(context);
                     }
@@ -131,7 +130,8 @@ class _RegInfoFormPage extends State<RegInfoFormPage> {
                       });
                     } else {
                       _btnController.error();
-                      AppUtils.displaySnackBar(context, "Ошибка добавления информации!");
+                      AppUtils.displaySnackBar(
+                          context, "Ошибка добавления информации!");
                       Timer(Duration(seconds: 1), () {
                         _btnController.reset();
                       });

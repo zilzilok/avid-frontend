@@ -8,27 +8,26 @@ import 'package:http/http.dart' as http;
 class GameApi {
   static Future<List<SearchGameResult>> getSearchedGamesJson(
       String search) async {
-    var headers;
-    try {
-      headers = await ApiInfo.defaultAuthorizationHeader();
-    } catch (e) {
-      throw e;
-    }
+    var headers = await ApiInfo.defaultAuthorizationHeader();
 
     Uri uri = Uri.https(ApiInfo.BASE_URL, "/games/all",
         {"title": search.trim(), "byUser": "true"});
-    log(uri.toString());
 
     var res = await http.get(
       uri,
       headers: headers,
     );
+
+    if (res.statusCode != HttpStatus.ok) {
+      return null;
+    }
+
     var body = utf8.decode(res.bodyBytes);
     log(body);
 
     Iterable iterableParsedJson = json.decode(body);
 
-    if (res.statusCode == HttpStatus.ok && iterableParsedJson.isNotEmpty) {
+    if (iterableParsedJson.isNotEmpty) {
       return List<SearchGameResult>.from(
           iterableParsedJson.map((game) => SearchGameResult.fromJson(game)));
     }
@@ -36,21 +35,20 @@ class GameApi {
   }
 
   static Future<List<SearchGameResult>> getRecommendedGamesJson() async {
-    var headers;
-    try {
-      headers = await ApiInfo.defaultAuthorizationHeader();
-    } catch (e) {
-      throw e;
-    }
+    var headers = await ApiInfo.defaultAuthorizationHeader();
 
     Uri uri = Uri.https(
         ApiInfo.BASE_URL, "/games/all", {"limit": "3", "byUser": "true"});
-    log(uri.toString());
 
     var res = await http.get(
       uri,
       headers: headers,
     );
+
+    if (res.statusCode != HttpStatus.ok) {
+      return List.empty();
+    }
+
     var body = utf8.decode(res.bodyBytes);
     log(body);
 

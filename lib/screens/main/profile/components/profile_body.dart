@@ -62,6 +62,12 @@ class ProfileBody extends StatelessWidget {
                             onPressed: () {},
                           ),
                           CustomButton(
+                            text: "мои игры",
+                            onPressed: () {
+                              
+                            },
+                          ),
+                          CustomButton(
                             text: "клубы",
                             onPressed: () {},
                           ),

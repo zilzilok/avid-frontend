@@ -3,18 +3,14 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 
 import 'api_info.dart';
 
 class UserApi {
   static Future<int> updateUserInfo(String firstName, String secondName,
       String gender, String date, String fileName) async {
-    var headers;
-    try {
-      headers = await ApiInfo.defaultAuthorizationHeader();
-    } catch (e) {
-      throw e;
-    }
+    var headers = await ApiInfo.defaultAuthorizationHeader();
 
     Map<String, String> bodyMap = {
       "firstName": firstName,
@@ -41,12 +37,7 @@ class UserApi {
   }
 
   static Future<String> saveAvatar(String fileName) async {
-    var authEntry;
-    try {
-      authEntry = await ApiInfo.authorizationEntry();
-    } catch (e) {
-      throw e;
-    }
+    var authEntry = await ApiInfo.authorizationEntry();
 
     var request = http.MultipartRequest(
         'POST', Uri.https(ApiInfo.BASE_URL, "/user/storage/upload"));
@@ -60,13 +51,8 @@ class UserApi {
     return null;
   }
 
-  static Future<Map<String, dynamic>> getProfileJson() async {
-    var headers;
-    try {
-      headers = await ApiInfo.defaultAuthorizationHeader();
-    } catch (e) {
-      throw e;
-    }
+  static Future<Response> getProfileRequest() async {
+    var headers = await ApiInfo.defaultAuthorizationHeader();
 
     var res = await http.get(
       Uri.https(ApiInfo.BASE_URL, "/user"),
@@ -74,16 +60,11 @@ class UserApi {
     );
     log(res.body);
 
-    return jsonDecode(res.body);
+    return res;
   }
 
   static Future<int> addGame(String alias) async {
-    var headers;
-    try {
-      headers = await ApiInfo.defaultAuthorizationHeader();
-    } catch (e) {
-      throw e;
-    }
+    var headers = await ApiInfo.defaultAuthorizationHeader();
 
     var res = await http.get(
       Uri.https(ApiInfo.BASE_URL, "user/games/add", {"alias": alias}),
@@ -95,12 +76,7 @@ class UserApi {
   }
 
   static Future<int> removeGame(String alias) async {
-    var headers;
-    try {
-      headers = await ApiInfo.defaultAuthorizationHeader();
-    } catch (e) {
-      throw e;
-    }
+    var headers = await ApiInfo.defaultAuthorizationHeader();
 
     var res = await http.get(
       Uri.https(ApiInfo.BASE_URL, "user/games/remove", {"alias": alias}),

@@ -1,10 +1,16 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:avid_frontend/res/constants.dart';
 import 'package:avid_frontend/screens/auth/api/user_api.dart';
+import 'package:avid_frontend/screens/auth/components/auth_utils.dart';
 import 'package:avid_frontend/screens/auth/components/fields/date_field.dart';
 import 'package:avid_frontend/screens/main/profile/components/user_dto.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart';
 
 class ProfileInfo extends StatelessWidget {
   @override
@@ -12,96 +18,105 @@ class ProfileInfo extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     double imageRadius = size.width / 7;
     return FutureBuilder(
-      future: UserApi.getProfileJson(),
+      future: UserApi.getProfileRequest(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          var user = UserDao.fromJson(snapshot.data);
-          int years = user.birthdate != null && user.birthdate.isNotEmpty
-              ? _countYears(user.birthdate)
-              : -1;
-          return Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                CircleAvatar(
-                  radius: imageRadius,
-                  backgroundColor: kPrimaryLightColor,
-                  // TODO: Временно, чтоб избежать большого количества запросов на aws s3
-                  child: /*user.photoPath != null && user.photoPath.isNotEmpty*/ false
-                      ? ClipRRect(
-                          borderRadius: BorderRadius.circular(imageRadius),
-                          child: Image.network(
-                            user.photoPath,
-                            width: 2 * imageRadius,
-                            height: 2 * imageRadius,
-                            fit: BoxFit.cover,
+          var res = snapshot.data as Response;
+          if (res.statusCode == HttpStatus.forbidden ||
+              res.statusCode == HttpStatus.unauthorized) {
+            AuthUtils.deleteJwt();
+            Phoenix.rebirth(context);
+          }
+          if (res.statusCode == HttpStatus.ok) {
+            var user = UserDao.fromJson(jsonDecode(res.body));
+            int years = user.birthdate != null && user.birthdate.isNotEmpty
+                ? _countYears(user.birthdate)
+                : -1;
+            return Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  CircleAvatar(
+                    radius: imageRadius,
+                    backgroundColor: kPrimaryLightColor,
+                    // TODO: Временно, чтоб избежать большого количества запросов на aws s3
+                    child: /*user.photoPath != null && user.photoPath.isNotEmpty*/ false
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(imageRadius),
+                            child: Image.network(
+                              user.photoPath,
+                              width: 2 * imageRadius,
+                              height: 2 * imageRadius,
+                              fit: BoxFit.cover,
+                            ),
+                          )
+                        : Container(
+                            decoration: BoxDecoration(
+                              color: kLightGreyColor,
+                              borderRadius:
+                                  BorderRadius.circular(imageRadius - 1),
+                            ),
+                            width: 2 * (imageRadius - 1),
+                            height: 2 * (imageRadius - 1),
+                            child: Icon(
+                              CupertinoIcons.person,
+                              size: imageRadius,
+                              color: kWhiteColor,
+                            ),
                           ),
-                        )
-                      : Container(
-                    decoration: BoxDecoration(
-                      color: kLightGreyColor,
-                      borderRadius: BorderRadius.circular(imageRadius - 1),
-                    ),
-                    width: 2 * (imageRadius - 1),
-                    height: 2 * (imageRadius - 1),
-                    child: Icon(
-                      CupertinoIcons.person,
-                      size: imageRadius,
-                      color: kWhiteColor,
-                    ),
                   ),
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Expanded(
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Text(
-                          user.username,
-                          style: GoogleFonts.montserrat(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Text(
+                            user.username,
+                            style: GoogleFonts.montserrat(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            ),
                           ),
-                        ),
-                        Column(
-                          children: [
-                            Text.rich(
-                              TextSpan(
-                                style: GoogleFonts.montserrat(fontSize: 20),
-                                children: <TextSpan>[
-                                  TextSpan(
-                                      text: user.firstName != null
-                                          ? user.firstName
-                                          : ""),
-                                  TextSpan(text: " "),
-                                  TextSpan(
-                                      text: user.secondName != null
-                                          ? user.secondName
-                                          : ""),
-                                ],
+                          Column(
+                            children: [
+                              Text.rich(
+                                TextSpan(
+                                  style: GoogleFonts.montserrat(fontSize: 20),
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                        text: user.firstName != null
+                                            ? user.firstName
+                                            : ""),
+                                    TextSpan(text: " "),
+                                    TextSpan(
+                                        text: user.secondName != null
+                                            ? user.secondName
+                                            : ""),
+                                  ],
+                                ),
                               ),
-                            ),
-                            Text(
-                              years != -1
-                                  ? years.toString() +
-                                      " " +
-                                      _russianYearWord(years)
-                                  : "",
-                              style: GoogleFonts.montserrat(fontSize: 20),
-                            ),
-                          ],
-                        ),
-                      ],
+                              Text(
+                                years != -1
+                                    ? years.toString() +
+                                        " " +
+                                        _russianYearWord(years)
+                                    : "",
+                                style: GoogleFonts.montserrat(fontSize: 20),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          );
+                ],
+              ),
+            );
+          }
         }
         return SizedBox(
           child: CircularProgressIndicator(
