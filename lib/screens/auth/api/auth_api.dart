@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:avid_frontend/screens/auth/api/api_info.dart';
@@ -16,6 +17,9 @@ class AuthApi {
         "password": password,
       }),
     );
+    log("AuthApi.attemptAuth: response statusCode = ${res.statusCode}");
+    log("AuthApi.attemptAuth: response body = ${res.body}");
+
     if (res.statusCode == HttpStatus.ok) {
       return res.body;
     }
@@ -36,6 +40,9 @@ class AuthApi {
         "matchingPassword": matchingPassword,
       }),
     );
+    log("AuthApi.attemptRegister: response statusCode = ${res.statusCode}");
+    log("AuthApi.attemptRegister: response body = ${res.body}");
+
     return res.statusCode;
   }
 
@@ -47,6 +54,8 @@ class AuthApi {
         "authorization": "Bearer $jwt",
       },
     );
+    log("AuthApi.attempt: response statusCode = ${res.statusCode}");
+
     return res.statusCode == HttpStatus.ok;
   }
 }

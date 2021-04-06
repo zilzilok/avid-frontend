@@ -6,7 +6,6 @@ import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
 import 'api_info.dart';
-import 'game_api.dart';
 
 class UserApi {
   static Future<int> updateUserInfo(String firstName, String secondName,
@@ -33,7 +32,9 @@ class UserApi {
       headers: headers,
       body: jsonEncode(bodyMap),
     );
-    log(res.body);
+    log("UserApi.updateUserInfo: response statusCode = ${res.statusCode}");
+    log("UserApi.updateUserInfo: response body = ${res.body}");
+
     return res.statusCode;
   }
 
@@ -45,6 +46,8 @@ class UserApi {
     request.files.add(await http.MultipartFile.fromPath('file', fileName));
     request.headers.addAll(authEntry);
     var res = await http.Response.fromStream(await request.send());
+    log("UserApi.saveAvatar: response statusCode = ${res.statusCode}");
+    log("UserApi.saveAvatar: response body = ${res.body}");
 
     if (res.statusCode == HttpStatus.ok) {
       return res.body;
@@ -52,14 +55,15 @@ class UserApi {
     return null;
   }
 
-  static Future<Response> getProfileRequest() async {
+  static Future<Response> getUser() async {
     var headers = await ApiInfo.defaultAuthorizationHeader();
 
     var res = await http.get(
       Uri.https(ApiInfo.BASE_URL, "/user"),
       headers: headers,
     );
-    log(res.body);
+    log("UserApi.getUser: response statusCode = ${res.statusCode}");
+    log("UserApi.getUser: response body = ${res.body}");
 
     return res;
   }
@@ -67,11 +71,12 @@ class UserApi {
   static Future<int> addGame(String alias) async {
     var headers = await ApiInfo.defaultAuthorizationHeader();
 
-    var res = await http.get(
+    Response res = await http.get(
       Uri.https(ApiInfo.BASE_URL, "user/games/add", {"alias": alias}),
       headers: headers,
     );
-    log(res.body);
+    log("UserApi.addGame: response statusCode = ${res.statusCode}");
+    log("UserApi.addGame: response body = ${res.body}");
 
     return res.statusCode;
   }
@@ -83,12 +88,13 @@ class UserApi {
       Uri.https(ApiInfo.BASE_URL, "user/games/remove", {"alias": alias}),
       headers: headers,
     );
-    log(res.body);
+    log("UserApi.removeGame: response statusCode = ${res.statusCode}");
+    log("UserApi.removeGame: response body = ${res.body}");
 
     return res.statusCode;
   }
 
-  static Future<List<GameResult>> getUserGamesJson() async {
+  static Future<Response> getUserGames() async {
     var headers = await ApiInfo.defaultAuthorizationHeader();
 
     Uri uri = Uri.https(ApiInfo.BASE_URL, "/user/games");
@@ -97,20 +103,9 @@ class UserApi {
       uri,
       headers: headers,
     );
+    log("UserApi.getUserGames: response statusCode = ${res.statusCode}");
+    log("UserApi.getUserGames: response body = ${res.body}");
 
-    if (res.statusCode != HttpStatus.ok) {
-      return List.empty();
-    }
-
-    var body = utf8.decode(res.bodyBytes);
-    log(body);
-
-    Iterable iterableParsedJson = json.decode(body);
-
-    if (res.statusCode == HttpStatus.ok && iterableParsedJson.isNotEmpty) {
-      return List<GameResult>.from(
-          iterableParsedJson.map((game) => GameResult.fromJson(game)));
-    }
-    return List.empty();
+    return res;
   }
 }

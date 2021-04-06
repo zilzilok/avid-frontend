@@ -75,7 +75,7 @@ class _GamePageState extends State<GamePage> {
                           children: <Widget>[
                             SizedBox(height: size.height * 0.02),
                             Container(
-                              height: size.height * 0.3,
+                              height: size.height * 0.25,
                               padding: EdgeInsets.symmetric(
                                   vertical: size.height * 0.02),
                               child: Hero(

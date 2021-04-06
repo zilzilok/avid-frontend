@@ -18,7 +18,7 @@ class ProfileInfo extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     double imageRadius = size.width / 7;
     return FutureBuilder(
-      future: UserApi.getProfileRequest(),
+      future: UserApi.getUser(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           var res = snapshot.data as Response;

@@ -1,12 +1,12 @@
-import 'package:avid_frontend/components/custom_button.dart';
+
 import 'package:avid_frontend/res/constants.dart';
+import 'package:avid_frontend/screens/main/profile/components/custom_button.dart';
+import 'package:avid_frontend/screens/main/profile/components/games/games_button.dart';
 import 'package:avid_frontend/screens/main/profile/components/profile_bg.dart';
 import 'package:avid_frontend/screens/main/profile/components/profile_info.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import 'games_page.dart';
 
 class ProfileBody extends StatelessWidget {
   @override
@@ -59,22 +59,12 @@ class ProfileBody extends StatelessWidget {
                           SizedBox(height: size.height * 0.02),
                           ProfileInfo(),
                           SizedBox(height: size.height * 0.02),
-                          CustomButton(
+                          CountButton(
                             text: "друзья",
                             onPressed: () {},
                           ),
-                          CustomButton(
-                            text: "мои игры",
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) {
-                                  return GamesPage();
-                                }),
-                              );
-                            },
-                          ),
-                          CustomButton(
+                          GamesButton(),
+                          CountButton(
                             text: "клубы",
                             onPressed: () {},
                           ),

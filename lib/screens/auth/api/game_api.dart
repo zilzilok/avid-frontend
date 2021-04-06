@@ -23,7 +23,8 @@ class GameApi {
     }
 
     var body = utf8.decode(res.bodyBytes);
-    log(body);
+    log("GameApi.getSearchedGamesJson: response statusCode = ${res.statusCode}");
+    log("GameApi.getSearchedGamesJson: response body = $body");
 
     Iterable iterableParsedJson = json.decode(body);
 
@@ -50,7 +51,8 @@ class GameApi {
     }
 
     var body = utf8.decode(res.bodyBytes);
-    log(body);
+    log("GameApi.getRecommendedGamesJson: response statusCode = ${res.statusCode}");
+    log("GameApi.getRecommendedGamesJson: response body = $body");
 
     Iterable iterableParsedJson = json.decode(body);
 

@@ -1,12 +1,18 @@
 import 'package:avid_frontend/res/constants.dart';
 import 'package:avid_frontend/screens/auth/api/game_api.dart';
-import 'package:avid_frontend/screens/auth/api/user_api.dart';
 import 'package:avid_frontend/screens/main/profile/components/profile_bg.dart';
 import 'package:avid_frontend/screens/main/search/components/game_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class GamesPage extends StatelessWidget {
+  final List<GameResult> games;
+
+  const GamesPage({
+    Key key,
+    @required this.games,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -60,34 +66,27 @@ class GamesPage extends StatelessWidget {
                             ),
                             SizedBox(height: size.height * 0.02),
                             Expanded(
-                              child: FutureBuilder(
-                                future: UserApi.getUserGamesJson(),
-                                builder: (context, snapshot) {
-                                  if (snapshot.hasData) {
-                                    var games =
-                                    snapshot.data as List<GameResult>;
-                                    return ListView.builder(
-                                        itemCount: games.length,
-                                        itemBuilder: (context, index) {
-                                          return Padding(
-                                            padding:
-                                            const EdgeInsets.only(bottom: 10),
-                                            child: GameListTile(game: games[index]),
-                                          );
-                                        });
-                                  }
-                                  return Center(
-                                    child: SizedBox(
-                                      child: CircularProgressIndicator(
-                                        valueColor: AlwaysStoppedAnimation<Color>(
-                                            kPrimaryColor),
+                              child: games.length > 0
+                                  ? ListView.builder(
+                                      itemCount: games.length,
+                                      itemBuilder: (context, index) {
+                                        return Padding(
+                                          padding:
+                                              const EdgeInsets.only(bottom: 10),
+                                          child:
+                                              GameListTile(game: games[index]),
+                                        );
+                                      },
+                                    )
+                                  : Center(
+                                    child: Text(
+                                        "У вас нет игр",
+                                        style: GoogleFonts.montserrat(
+                                          color: kPrimaryColor,
+                                          fontSize: 20,
+                                        ),
                                       ),
-                                      width: 40,
-                                      height: 40,
-                                    ),
-                                  );
-                                },
-                              ),
+                                  ),
                             ),
                           ],
                         ),

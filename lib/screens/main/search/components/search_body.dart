@@ -1,4 +1,3 @@
-
 import 'package:avid_frontend/res/constants.dart';
 import 'package:avid_frontend/screens/auth/api/game_api.dart';
 import 'package:avid_frontend/screens/main/search/components/game_list_tile.dart';
@@ -17,53 +16,52 @@ class SearchBody extends StatelessWidget {
     return SearchBackground(
       child: SafeArea(
         child: SearchBar<SearchGameResult>(
-            cancellationWidget: Icon(
-              Icons.close,
-              color: kWhiteColor,
-            ),
-            searchBarPadding: EdgeInsets.symmetric(horizontal: 10.0),
-            placeHolder: SearchPlaceholder(),
-            icon: Icon(
-              Icons.search,
-              color: kPrimaryColor,
-            ),
-            hintText: "Название настольной игры",
-            hintStyle:
-                GoogleFonts.montserrat(fontSize: 16, color: kTextGreyColor),
-            textStyle:
-                GoogleFonts.montserrat(fontSize: 16, color: kTextGreyColor),
-            searchBarStyle: SearchBarStyle(
-              backgroundColor: kWhiteColor,
-              borderRadius: const BorderRadius.all(const Radius.circular(29)),
-            ),
-            onSearch: GameApi.getSearchedGamesJson,
-            onItemFound: (SearchGameResult game, int index) {
-              return GameListTile(game: game);
-            },
-            mainAxisSpacing: 10,
-            onError: (error) {
-              return Center(
-                child: Text(
-                  "Ошибка: $error",
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.montserrat(
-                    fontWeight: FontWeight.bold,
-                    color: kWhiteColor,
-                    fontSize: 20,
-                  ),
-                ),
-              );
-            },
-            emptyWidget: Center(
+          cancellationWidget: Icon(
+            Icons.close,
+            color: kWhiteColor,
+          ),
+          searchBarPadding: EdgeInsets.symmetric(horizontal: 10.0),
+          placeHolder: SearchPlaceholder(),
+          icon: Icon(
+            Icons.search,
+            color: kPrimaryColor,
+          ),
+          hintText: "Название настольной игры",
+          hintStyle:
+              GoogleFonts.montserrat(fontSize: 16, color: kTextGreyColor),
+          textStyle:
+              GoogleFonts.montserrat(fontSize: 16, color: kTextGreyColor),
+          searchBarStyle: SearchBarStyle(
+            backgroundColor: kWhiteColor,
+            borderRadius: const BorderRadius.all(const Radius.circular(29)),
+          ),
+          onSearch: GameApi.getSearchedGamesJson,
+          onItemFound: (SearchGameResult game, int index) {
+            return GameListTile(game: game);
+          },
+          mainAxisSpacing: 10,
+          onError: (error) {
+            return Center(
               child: Text(
-                "Ничего не найдено",
+                "Ошибка: $error",
+                textAlign: TextAlign.center,
                 style: GoogleFonts.montserrat(
-                  fontWeight: FontWeight.bold,
                   color: kWhiteColor,
                   fontSize: 20,
                 ),
               ),
-            )),
+            );
+          },
+          emptyWidget: Center(
+            child: Text(
+              "Ничего не найдено",
+              style: GoogleFonts.montserrat(
+                color: kWhiteColor,
+                fontSize: 20,
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }
