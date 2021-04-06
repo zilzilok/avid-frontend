@@ -66,6 +66,8 @@ dependencies:
   auto_size_text: ^2.1.0
   # html text
   flutter_html: ^1.2.0
+  # drop-down refresh
+  pull_to_refresh: ^1.6.4
 
 flutter_launcher_name:
   name: "AviD"

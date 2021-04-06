@@ -7,57 +7,81 @@ import 'package:flappy_search_bar/search_bar_style.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'category_button.dart';
 
-class SearchBody extends StatelessWidget {
+class SearchBody extends StatefulWidget {
+  @override
+  State<SearchBody> createState() => _SearchBodyState();
+}
+
+class _SearchBodyState extends State<SearchBody> {
   @override
   Widget build(BuildContext context) {
+    RefreshController _refreshController =
+        RefreshController(initialRefresh: false);
+
+    void _onRefresh() async {
+      await Future.delayed(Duration(milliseconds: 1000));
+      setState(() {});
+      _refreshController.refreshCompleted();
+    }
+
     return SearchBackground(
       child: SafeArea(
-        child: SearchBar<SearchGameResult>(
-          cancellationWidget: Icon(
-            Icons.close,
+        child: SmartRefresher(
+          controller: _refreshController,
+          onRefresh: _onRefresh,
+          header: MaterialClassicHeader(
+            backgroundColor: kPrimaryColor,
             color: kWhiteColor,
           ),
-          searchBarPadding: EdgeInsets.symmetric(horizontal: 10.0),
-          placeHolder: SearchPlaceholder(),
-          icon: Icon(
-            Icons.search,
-            color: kPrimaryColor,
-          ),
-          hintText: "Название настольной игры",
-          hintStyle:
-              GoogleFonts.montserrat(fontSize: 16, color: kTextGreyColor),
-          textStyle:
-              GoogleFonts.montserrat(fontSize: 16, color: kTextGreyColor),
-          searchBarStyle: SearchBarStyle(
-            backgroundColor: kWhiteColor,
-            borderRadius: const BorderRadius.all(const Radius.circular(29)),
-          ),
-          onSearch: GameApi.getSearchedGamesJson,
-          onItemFound: (SearchGameResult game, int index) {
-            return GameListTile(game: game);
-          },
-          mainAxisSpacing: 10,
-          onError: (error) {
-            return Center(
+          child: SearchBar<SearchGameResult>(
+            cancellationWidget: Icon(
+              Icons.close,
+              color: kWhiteColor,
+            ),
+            searchBarPadding: EdgeInsets.symmetric(horizontal: 10.0),
+            placeHolder: SearchPlaceholder(),
+            icon: Icon(
+              Icons.search,
+              color: kPrimaryColor,
+            ),
+            minimumChars: 1,
+            hintText: "Название настольной игры",
+            hintStyle:
+                GoogleFonts.montserrat(fontSize: 16, color: kTextGreyColor),
+            textStyle:
+                GoogleFonts.montserrat(fontSize: 16, color: kTextGreyColor),
+            searchBarStyle: SearchBarStyle(
+              backgroundColor: kWhiteColor,
+              borderRadius: const BorderRadius.all(const Radius.circular(29)),
+            ),
+            onSearch: GameApi.getSearchedGamesJson,
+            onItemFound: (SearchGameResult game, int index) {
+              return GameListTile(game: game);
+            },
+            mainAxisSpacing: 10,
+            onError: (error) {
+              return Center(
+                child: Text(
+                  "Ошибка: $error",
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.montserrat(
+                    color: kWhiteColor,
+                    fontSize: 20,
+                  ),
+                ),
+              );
+            },
+            emptyWidget: Center(
               child: Text(
-                "Ошибка: $error",
-                textAlign: TextAlign.center,
+                "Ничего не найдено",
                 style: GoogleFonts.montserrat(
                   color: kWhiteColor,
                   fontSize: 20,
                 ),
-              ),
-            );
-          },
-          emptyWidget: Center(
-            child: Text(
-              "Ничего не найдено",
-              style: GoogleFonts.montserrat(
-                color: kWhiteColor,
-                fontSize: 20,
               ),
             ),
           ),
