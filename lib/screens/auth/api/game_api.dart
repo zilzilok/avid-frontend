@@ -73,6 +73,9 @@ class GameResult {
   final int playersMin;
   final int playersMax;
   final int year;
+  final String review;
+  final double rating;
+  final double averageRating;
   bool has;
 
   GameResult({
@@ -85,19 +88,25 @@ class GameResult {
     this.imageURL,
     this.shortDescription,
     this.has,
+    this.review,
+    this.rating,
+    this.averageRating,
   });
 
   factory GameResult.fromJson(Map<String, dynamic> parsedJson) {
     return GameResult(
-      alias: parsedJson["alias"],
-      title: parsedJson["titles"][0],
-      shortDescription: parsedJson["descriptionShort"],
-      description: parsedJson["description"],
-      imageURL: parsedJson["photoUrl"],
-      year: parsedJson["year"],
-      playersMin: parsedJson["playersMin"],
-      playersMax: parsedJson["playersMax"],
+      alias: parsedJson["game"]["alias"],
+      title: parsedJson["game"]["titles"][0],
+      shortDescription: parsedJson["game"]["descriptionShort"],
+      description: parsedJson["game"]["description"],
+      imageURL: parsedJson["game"]["photoUrl"],
+      year: parsedJson["game"]["year"],
+      playersMin: parsedJson["game"]["playersMin"],
+      playersMax: parsedJson["game"]["playersMax"],
       has: true,
+      rating: parsedJson["rating"],
+      averageRating: parsedJson["game"]["averageRating"],
+      review: parsedJson["review"],
     );
   }
 }
@@ -113,6 +122,8 @@ class SearchGameResult extends GameResult {
     int playersMax,
     int year,
     bool has,
+    double averageRating,
+    double rating,
   }) : super(
           alias: alias,
           title: title,
@@ -123,6 +134,8 @@ class SearchGameResult extends GameResult {
           playersMax: playersMax,
           year: year,
           has: has,
+          averageRating: averageRating,
+          rating: rating,
         );
 
   factory SearchGameResult.fromJson(Map<String, dynamic> parsedJson) {
@@ -136,6 +149,8 @@ class SearchGameResult extends GameResult {
       playersMin: parsedJson["boardGames"]["playersMin"],
       playersMax: parsedJson["boardGames"]["playersMax"],
       has: parsedJson["has"],
+      rating: parsedJson["rating"],
+      averageRating: parsedJson["boardGames"]["averageRating"],
     );
   }
 }

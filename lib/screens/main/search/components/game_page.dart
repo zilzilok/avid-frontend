@@ -157,7 +157,8 @@ class _GamePageState extends State<GamePage> {
                                         if (connectivityResult !=
                                             ConnectivityResult.none) {
                                           var statusCode =
-                                              await UserApi.addGame(game.alias);
+                                              await UserApi.addGame(
+                                                  game.alias, "", 5);
 
                                           if (statusCode ==
                                                   HttpStatus.forbidden ||
@@ -193,6 +194,44 @@ class _GamePageState extends State<GamePage> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
+                                      Padding(
+                                          padding: EdgeInsets.only(
+                                              bottom: size.height * 0.01),
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.end,
+                                            children: [
+                                              Text.rich(
+                                                TextSpan(
+                                                  style: GoogleFonts.montserrat(
+                                                      fontSize: 16),
+                                                  children: <TextSpan>[
+                                                    TextSpan(
+                                                      text:
+                                                          "Рейтинг пользователей:\t",
+                                                      style: GoogleFonts
+                                                          .montserrat(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                    TextSpan(
+                                                        text: game.averageRating
+                                                            .toString()),
+                                                  ],
+                                                ),
+                                              ),
+                                              Icon(
+                                                game.averageRating == 5.0
+                                                    ? Icons.star
+                                                    : (game.averageRating == 0.0
+                                                        ? Icons.star_border
+                                                        : Icons.star_half),
+                                                color: kPrimaryColor,
+                                              ),
+                                            ],
+                                          )),
                                       Padding(
                                         padding: EdgeInsets.only(
                                             bottom: size.height * 0.01),

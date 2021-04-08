@@ -68,11 +68,15 @@ class UserApi {
     return res;
   }
 
-  static Future<int> addGame(String alias) async {
+  static Future<int> addGame(String alias, String review, double rating) async {
     var headers = await ApiInfo.defaultAuthorizationHeader();
 
-    Response res = await http.get(
-      Uri.https(ApiInfo.BASE_URL, "user/games/add", {"alias": alias}),
+    Response res = await http.post(
+      Uri.https(ApiInfo.BASE_URL, "user/games/add", {
+        "alias": alias,
+        "rating": rating,
+        "review": review.trim().split(' ').join('+'),
+      }),
       headers: headers,
     );
     log("UserApi.addGame: response statusCode = ${res.statusCode}");

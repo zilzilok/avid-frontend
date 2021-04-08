@@ -34,25 +34,81 @@ class GameListTile extends StatelessWidget {
               borderRadius: BorderRadius.all(Radius.circular(22))),
           child: Row(
             children: [
-              Padding(
-                padding: EdgeInsets.all(10),
-                child: Container(
-                  alignment: Alignment.center,
-                  width: size.width * 0.2,
-                  height: size.width * 0.2,
-                  decoration: BoxDecoration(
-                      color: kWhiteColor,
-                      borderRadius: BorderRadius.all(Radius.circular(10))),
-                  child: Padding(
-                    padding: EdgeInsets.all(10),
-                    child: Hero(
-                      tag: game.alias,
-                      child: Image.network(game.imageURL),
-                    ),
+              Flexible(
+                flex: 1,
+                child: Padding(
+                  padding: EdgeInsets.all(10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 5.0),
+                          child: Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                                color: kWhiteColor,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10))),
+                            child: Padding(
+                              padding: EdgeInsets.all(10),
+                              child: Hero(
+                                tag: game.alias,
+                                child: Image.network(game.imageURL),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      game.rating != null
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.supervised_user_circle_outlined,
+                                      color: kPrimaryColor,
+                                    ),
+                                    Text(
+                                      game.averageRating.toString(),
+                                      style: GoogleFonts.montserrat(),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Icon(
+                                      CupertinoIcons.profile_circled,
+                                      color: kPrimaryColor,
+                                    ),
+                                    Text(
+                                      game.rating.toString(),
+                                      style: GoogleFonts.montserrat(),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            )
+                          : Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.supervised_user_circle_outlined,
+                                  color: kPrimaryColor,
+                                ),
+                                Text(
+                                  game.averageRating.toString(),
+                                  style: GoogleFonts.montserrat(),
+                                ),
+                              ],
+                            ),
+                    ],
                   ),
                 ),
               ),
-              Expanded(
+              Flexible(
+                flex: 2,
                 child: Padding(
                   padding: const EdgeInsets.only(top: 5, right: 10, bottom: 5),
                   child: Column(
@@ -61,7 +117,7 @@ class GameListTile extends StatelessWidget {
                       Text(
                         game.title,
                         style:
-                        GoogleFonts.montserrat(fontWeight: FontWeight.bold),
+                            GoogleFonts.montserrat(fontWeight: FontWeight.bold),
                       ),
                       Expanded(
                         child: Text(
@@ -69,7 +125,7 @@ class GameListTile extends StatelessWidget {
                           overflow: TextOverflow.fade,
                           style: GoogleFonts.montserrat(),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
