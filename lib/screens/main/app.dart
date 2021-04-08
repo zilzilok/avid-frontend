@@ -13,13 +13,13 @@ class AppScreenState extends State<AppScreen> {
   List<String> pageKeys = [
     "Feed",
     "Search",
-    "Notifications",
+    // "Notifications",
     "Profile",
   ];
   Map<String, GlobalKey<NavigatorState>> _navigatorKeys = {
     "Feed": GlobalKey<NavigatorState>(),
     "Search": GlobalKey<NavigatorState>(),
-    "Notifications": GlobalKey<NavigatorState>(),
+    // "Notifications": GlobalKey<NavigatorState>(),
     "Profile": GlobalKey<NavigatorState>(),
   };
   int _selectedIndex = 0;
@@ -56,7 +56,7 @@ class AppScreenState extends State<AppScreen> {
           children: <Widget>[
             _buildOffstageNavigator("Feed"),
             _buildOffstageNavigator("Search"),
-            _buildOffstageNavigator("Notifications"),
+            // _buildOffstageNavigator("Notifications"),
             _buildOffstageNavigator("Profile"),
           ],
         ),
@@ -71,8 +71,8 @@ class AppScreenState extends State<AppScreen> {
             onTap: (int index) {
               _selectTab(pageKeys[index], index);
             },
-            showSelectedLabels: false,
-            showUnselectedLabels: false,
+            showSelectedLabels: true,
+            showUnselectedLabels: true,
             currentIndex: _selectedIndex,
             items: [
               BottomNavigationBarItem(
@@ -85,11 +85,11 @@ class AppScreenState extends State<AppScreen> {
                 activeIcon: new Icon(Icons.search),
                 label: "Поиск",
               ),
-              BottomNavigationBarItem(
-                icon: new Icon(Icons.notifications_active_outlined),
-                activeIcon: new Icon(Icons.notifications_active),
-                label: "Уведомления",
-              ),
+              // BottomNavigationBarItem(
+              //   icon: new Icon(Icons.notifications_active_outlined),
+              //   activeIcon: new Icon(Icons.notifications_active),
+              //   label: "Уведомления",
+              // ),
               BottomNavigationBarItem(
                 icon: new Icon(Icons.person_outline),
                 activeIcon: new Icon(Icons.person),
