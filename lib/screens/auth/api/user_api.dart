@@ -74,7 +74,7 @@ class UserApi {
     Response res = await http.post(
       Uri.https(ApiInfo.BASE_URL, "user/games/add", {
         "alias": alias,
-        "rating": rating,
+        "rating": rating.toString(),
         "review": review.trim().split(' ').join('+'),
       }),
       headers: headers,
