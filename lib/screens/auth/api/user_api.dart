@@ -75,7 +75,7 @@ class UserApi {
       Uri.https(ApiInfo.BASE_URL, "user/games/add", {
         "alias": alias,
         "rating": rating.toString(),
-        "review": review.trim().split(' ').join('+'),
+        "review": review.trim(),
       }),
       headers: headers,
     );

@@ -8,6 +8,7 @@ class InputField extends StatelessWidget {
   final ValueChanged<String> onChanged;
   final Function validator;
   final TextEditingController controller;
+  final TextInputType keyboardType;
 
   const InputField({
     Key key,
@@ -15,12 +16,14 @@ class InputField extends StatelessWidget {
     this.validator,
     this.hintText,
     this.onChanged,
+    this.keyboardType = TextInputType.text,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextFieldContainer(
       child: TextFormField(
+        keyboardType: keyboardType,
         onChanged: onChanged,
         controller: controller,
         cursorColor: kPrimaryColor,

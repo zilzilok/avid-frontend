@@ -55,6 +55,7 @@ class _RegFormPage extends State<RegFormPage> {
             InputField(
               hintText: "почта",
               controller: _emailController,
+              keyboardType: TextInputType.emailAddress,
               validator: Validator.email(),
             ),
             PasswordField(
