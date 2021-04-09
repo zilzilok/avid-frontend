@@ -3,7 +3,9 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:avid_frontend/screens/auth/api/api_info.dart';
+import 'package:avid_frontend/screens/main/profile/components/user_dto.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 
 class GameApi {
   static Future<List<SearchGameResult>> getSearchedGamesJson(
@@ -61,6 +63,21 @@ class GameApi {
           iterableParsedJson.map((game) => SearchGameResult.fromJson(game)));
     }
     return List.empty();
+  }
+
+  static Future<Response> getReviews(String alias) async {
+    var headers = await ApiInfo.defaultAuthorizationHeader();
+
+    Uri uri = Uri.https(ApiInfo.BASE_URL, "/games/owners", {"alias": alias});
+
+    var res = await http.get(
+      uri,
+      headers: headers,
+    );
+    log("UserApi.getReviews: response statusCode = ${res.statusCode}");
+    log("UserApi.getReviews: response body = ${res.body}");
+
+    return res;
   }
 }
 
@@ -151,6 +168,29 @@ class SearchGameResult extends GameResult {
       has: parsedJson["has"],
       rating: parsedJson["rating"],
       averageRating: parsedJson["boardGames"]["averageRating"],
+    );
+  }
+}
+
+class ReviewResult {
+  final UserDao owner;
+  final String review;
+  final double rating;
+  final DateTime creatingDate;
+
+  ReviewResult({
+    this.owner,
+    this.review,
+    this.rating,
+    this.creatingDate,
+  });
+
+  factory ReviewResult.fromJson(Map<String, dynamic> parsedJson) {
+    return ReviewResult(
+      owner: UserDao.fromJson(parsedJson["owner"]),
+      review: parsedJson["review"],
+      rating: parsedJson["rating"],
+      creatingDate: parsedJson["creatingDate"],
     );
   }
 }

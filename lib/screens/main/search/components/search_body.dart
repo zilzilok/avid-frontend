@@ -34,8 +34,8 @@ class _SearchBodyState extends State<SearchBody> {
           controller: _refreshController,
           onRefresh: _onRefresh,
           header: MaterialClassicHeader(
-            backgroundColor: kPrimaryColor,
-            color: kWhiteColor,
+            backgroundColor: kWhiteColor,
+            color: kPrimaryColor,
           ),
           child: SearchBar<SearchGameResult>(
             cancellationWidget: Icon(

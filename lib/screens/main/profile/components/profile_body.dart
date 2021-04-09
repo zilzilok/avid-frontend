@@ -29,12 +29,11 @@ class _ProfileBodyState extends State<ProfileBody> {
     return ProfileBackground(
       child: SafeArea(
         child: SmartRefresher(
-          // enablePullDown: true,
           controller: _refreshController,
           onRefresh: _onRefresh,
           header: MaterialClassicHeader(
-            backgroundColor: kPrimaryColor,
-            color: kWhiteColor,
+            backgroundColor: kWhiteColor,
+            color: kPrimaryColor,
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -82,12 +81,12 @@ class _ProfileBodyState extends State<ProfileBody> {
                             SizedBox(height: size.height * 0.02),
                             ProfileInfo(),
                             SizedBox(height: size.height * 0.02),
-                            CountButton(
+                            CustomButton(
                               text: "друзья",
                               onPressed: () {},
                             ),
                             GamesButton(),
-                            CountButton(
+                            CustomButton(
                               text: "клубы",
                               onPressed: () {},
                             ),

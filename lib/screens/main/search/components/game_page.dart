@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:avid_frontend/components/app_utils.dart';
@@ -7,6 +6,7 @@ import 'package:avid_frontend/res/constants.dart';
 import 'package:avid_frontend/screens/auth/api/game_api.dart';
 import 'package:avid_frontend/screens/auth/api/user_api.dart';
 import 'package:avid_frontend/screens/auth/components/auth_utils.dart';
+import 'package:avid_frontend/screens/main/search/components/reviews/reviews_button.dart';
 import 'package:avid_frontend/screens/main/search/components/search_bg.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:html/parser.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class GamePage extends StatefulWidget {
@@ -32,9 +33,16 @@ class _GamePageState extends State<GamePage> {
   final GameResult game;
   final TextEditingController _reviewController = TextEditingController();
   double _rating = 5.0;
-
+  RefreshController _refreshController =
+  RefreshController(initialRefresh: false);
 
   _GamePageState(this.game);
+
+  void _onRefresh() async {
+    await Future.delayed(Duration(milliseconds: 1000));
+    setState(() {});
+    _refreshController.refreshCompleted();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,206 +51,218 @@ class _GamePageState extends State<GamePage> {
       resizeToAvoidBottomInset: false,
       body: SearchBackground(
         child: SafeArea(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Container(
-                margin: EdgeInsets.only(top: 5, right: 5, bottom: 10),
-                width: size.width,
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: Icon(
-                      Icons.arrow_back_sharp,
-                      size: size.width * 0.1,
-                      color: kWhiteColor,
+          child: SmartRefresher(
+            controller: _refreshController,
+            onRefresh: _onRefresh,
+            header: MaterialClassicHeader(
+              backgroundColor: kWhiteColor,
+              color: kPrimaryColor,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Container(
+                  margin: EdgeInsets.only(top: 5, right: 5, bottom: 10),
+                  width: size.width,
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: Icon(
+                        Icons.arrow_back_sharp,
+                        size: size.width * 0.1,
+                        color: kWhiteColor,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: kWhiteColor,
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(50),
-                          topRight: Radius.circular(50))),
-                  child: SafeArea(
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Container(
-                        width: size.width * 0.9,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            SizedBox(height: size.height * 0.02),
-                            Container(
-                              height: size.height * 0.25,
-                              padding: EdgeInsets.symmetric(
-                                  vertical: size.height * 0.02),
-                              child: Hero(
-                                tag: game.alias,
-                                child: Image.network(
-                                  game.imageURL,
-                                  fit: BoxFit.fitHeight,
-                                ),
-                              ),
-                            ),
-                            Text(
-                              game.title,
-                              textAlign: TextAlign.center,
-                              style: GoogleFonts.montserrat(
-                                fontWeight: FontWeight.bold,
-                                color: kPrimaryColor,
-                                fontSize: 20,
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: size.height * 0.02),
-                              child: game.has
-                                  ? RoundedButton(
-                                      widthPc: 0.8,
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 13, horizontal: 20),
-                                      text: "убрать из библиотеки",
-                                      borderColor: kPrimaryColor,
-                                      bgColor: kWhiteColor,
-                                      textColor: kPrimaryColor,
-                                      onPressed: _confirmDialog,
-                                    )
-                                  : RoundedButton(
-                                      widthPc: 0.8,
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 13, horizontal: 20),
-                                      text: "добавить в библиотеку",
-                                      onPressed: _reviewDialog,
-                                    ),
-                            ),
-                            Expanded(
-                              child: SingleChildScrollView(
-                                child: Padding(
-                                  padding: EdgeInsets.only(
-                                      bottom: size.height * 0.01),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                          padding: EdgeInsets.only(
-                                              bottom: size.height * 0.01),
-                                          child: Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.end,
-                                            children: [
-                                              Text.rich(
-                                                TextSpan(
-                                                  style: GoogleFonts.montserrat(
-                                                      fontSize: 16),
-                                                  children: <TextSpan>[
-                                                    TextSpan(
-                                                      text:
-                                                          "Рейтинг пользователей:\t",
-                                                      style: GoogleFonts
-                                                          .montserrat(
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                    ),
-                                                    TextSpan(
-                                                        text: game.averageRating
-                                                            .toString()),
-                                                  ],
-                                                ),
-                                              ),
-                                              Icon(
-                                                game.averageRating == 5.0
-                                                    ? Icons.star
-                                                    : (game.averageRating == 0.0
-                                                        ? Icons.star_border
-                                                        : Icons.star_half),
-                                                color: kPrimaryColor,
-                                              ),
-                                            ],
-                                          )),
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                            bottom: size.height * 0.01),
-                                        child: Text.rich(
-                                          TextSpan(
-                                            style: GoogleFonts.montserrat(
-                                                fontSize: 16),
-                                            children: <TextSpan>[
-                                              TextSpan(
-                                                text: "Год создания:\t",
-                                                style: GoogleFonts.montserrat(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                              TextSpan(
-                                                  text: game.year.toString()),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                            bottom: size.height * 0.01),
-                                        child: Text.rich(
-                                          TextSpan(
-                                            style: GoogleFonts.montserrat(
-                                                fontSize: 16),
-                                            children: <TextSpan>[
-                                              TextSpan(
-                                                text: "Количество игроков:\t",
-                                                style: GoogleFonts.montserrat(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                              TextSpan(
-                                                  text: game.playersMin
-                                                      .toString()),
-                                              TextSpan(text: "-"),
-                                              TextSpan(
-                                                  text: game.playersMax
-                                                      .toString()),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                            bottom: size.height * 0.01),
-                                        child: Text(
-                                          "Описание:",
-                                          style: GoogleFonts.montserrat(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                      ),
-                                      Text(_parseHtmlString(game.description),
-                                          style: GoogleFonts.montserrat(
-                                              fontSize: 16)),
-                                    ],
+                Expanded(
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: kWhiteColor,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(50),
+                            topRight: Radius.circular(50))),
+                    child: SafeArea(
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Container(
+                          width: size.width * 0.9,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              SizedBox(height: size.height * 0.02),
+                              Container(
+                                height: size.height * 0.25,
+                                padding: EdgeInsets.symmetric(
+                                    vertical: size.height * 0.02),
+                                child: Hero(
+                                  tag: game.alias,
+                                  child: Image.network(
+                                    game.imageURL,
+                                    fit: BoxFit.fitHeight,
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
+                              Text(
+                                game.title,
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.montserrat(
+                                  fontWeight: FontWeight.bold,
+                                  color: kPrimaryColor,
+                                  fontSize: 20,
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: size.height * 0.02),
+                                child: game.has
+                                    ? RoundedButton(
+                                        widthPc: 0.8,
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 13, horizontal: 20),
+                                        text: "убрать из библиотеки",
+                                        borderColor: kPrimaryColor,
+                                        bgColor: kWhiteColor,
+                                        textColor: kPrimaryColor,
+                                        onPressed: _confirmDialog,
+                                      )
+                                    : RoundedButton(
+                                        widthPc: 0.8,
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 13, horizontal: 20),
+                                        text: "добавить в библиотеку",
+                                        onPressed: _reviewDialog,
+                                      ),
+                              ),
+                              Expanded(
+                                child: SingleChildScrollView(
+                                  child: Padding(
+                                    padding: EdgeInsets.only(
+                                        bottom: size.height * 0.01),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.only(
+                                              bottom: size.height * 0.01),
+                                          child: ReviewsButton(game: game,),
+                                        ),
+                                        Padding(
+                                            padding: EdgeInsets.only(
+                                                bottom: size.height * 0.01),
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.end,
+                                              children: [
+                                                Text.rich(
+                                                  TextSpan(
+                                                    style: GoogleFonts.montserrat(
+                                                        fontSize: 16),
+                                                    children: <TextSpan>[
+                                                      TextSpan(
+                                                        text: "Рейтинг:\t",
+                                                        style: GoogleFonts
+                                                            .montserrat(
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                      TextSpan(
+                                                          text: game.averageRating
+                                                              .toString()),
+                                                    ],
+                                                  ),
+                                                ),
+                                                Icon(
+                                                  game.averageRating == 5.0
+                                                      ? Icons.star
+                                                      : (game.averageRating == 0.0
+                                                          ? Icons.star_border
+                                                          : Icons.star_half),
+                                                  color: kPrimaryColor,
+                                                ),
+                                              ],
+                                            )),
+                                        Padding(
+                                          padding: EdgeInsets.only(
+                                              bottom: size.height * 0.01),
+                                          child: Text.rich(
+                                            TextSpan(
+                                              style: GoogleFonts.montserrat(
+                                                  fontSize: 16),
+                                              children: <TextSpan>[
+                                                TextSpan(
+                                                  text: "Год создания:\t",
+                                                  style: GoogleFonts.montserrat(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                TextSpan(
+                                                    text: game.year.toString()),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.only(
+                                              bottom: size.height * 0.01),
+                                          child: Text.rich(
+                                            TextSpan(
+                                              style: GoogleFonts.montserrat(
+                                                  fontSize: 16),
+                                              children: <TextSpan>[
+                                                TextSpan(
+                                                  text: "Количество игроков:\t",
+                                                  style: GoogleFonts.montserrat(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                TextSpan(
+                                                    text: game.playersMin
+                                                        .toString()),
+                                                TextSpan(text: "-"),
+                                                TextSpan(
+                                                    text: game.playersMax
+                                                        .toString()),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.only(
+                                              bottom: size.height * 0.01),
+                                          child: Text(
+                                            "Описание:",
+                                            style: GoogleFonts.montserrat(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16,
+                                            ),
+                                          ),
+                                        ),
+                                        Text(_parseHtmlString(game.description),
+                                            style: GoogleFonts.montserrat(
+                                                fontSize: 16)),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -313,7 +333,8 @@ class _GamePageState extends State<GamePage> {
                                     // width: double.infinity,
                                     // height: ,
                                     child: Row(
-                                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
                                       children: [
                                         Expanded(
                                           flex: 1,
@@ -324,7 +345,8 @@ class _GamePageState extends State<GamePage> {
                                               padding: EdgeInsets.all(0),
                                               shape: RoundedRectangleBorder(
                                                 borderRadius: BorderRadius.only(
-                                                  bottomLeft: Radius.circular(22),
+                                                  bottomLeft:
+                                                      Radius.circular(22),
                                                 ),
                                               ),
                                             ),
@@ -350,7 +372,8 @@ class _GamePageState extends State<GamePage> {
                                               padding: EdgeInsets.all(0),
                                               shape: RoundedRectangleBorder(
                                                 borderRadius: BorderRadius.only(
-                                                  bottomRight: Radius.circular(22),
+                                                  bottomRight:
+                                                      Radius.circular(22),
                                                 ),
                                               ),
                                             ),
@@ -489,15 +512,17 @@ class _GamePageState extends State<GamePage> {
                                       maxLines: null,
                                       maxLength: 100,
                                       keyboardType: TextInputType.text,
-                                      style: GoogleFonts.montserrat(fontSize: 16),
+                                      style:
+                                          GoogleFonts.montserrat(fontSize: 16),
                                       decoration: InputDecoration(
                                         border: OutlineInputBorder(
-                                          borderSide: BorderSide(color: kWhiteColor, width: 1.0),
+                                          borderSide: BorderSide(
+                                              color: kWhiteColor, width: 1.0),
                                         ),
                                         hintMaxLines: 1,
                                         hintText: "Отзыв об игре",
-                                        hintStyle:
-                                        GoogleFonts.montserrat(fontSize: 16),
+                                        hintStyle: GoogleFonts.montserrat(
+                                            fontSize: 16),
                                       ),
                                     ),
                                   ),
@@ -549,7 +574,8 @@ class _GamePageState extends State<GamePage> {
                                 color: Colors.black87,
                                 size: 19,
                               ),
-                              backgroundColor: Color.fromRGBO(240, 240, 240, 0.8),
+                              backgroundColor:
+                                  Color.fromRGBO(240, 240, 240, 0.8),
                               elevation: 2,
                             ),
                           ),
@@ -572,8 +598,8 @@ class _GamePageState extends State<GamePage> {
     });
     var connectivityResult = await Connectivity().checkConnectivity();
     if (connectivityResult != ConnectivityResult.none) {
-      var statusCode = await UserApi.addGame(game.alias,
-          _reviewController.text, _rating);
+      var statusCode =
+          await UserApi.addGame(game.alias, _reviewController.text, _rating);
 
       if (statusCode == HttpStatus.forbidden ||
           statusCode == HttpStatus.unauthorized) {

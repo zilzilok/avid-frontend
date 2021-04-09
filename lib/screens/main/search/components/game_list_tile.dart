@@ -110,7 +110,7 @@ class GameListTile extends StatelessWidget {
               Flexible(
                 flex: 2,
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 5, right: 10, bottom: 5),
+                  padding: const EdgeInsets.only(top: 10, right: 10, bottom: 10),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [

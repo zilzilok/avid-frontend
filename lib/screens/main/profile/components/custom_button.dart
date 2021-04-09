@@ -4,15 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class CountButton extends StatelessWidget {
+class CustomButton extends StatelessWidget {
   final String text;
   final Function onPressed;
   final Color bgColor;
   final Color textColor;
   final Color borderColor;
   final int count;
+  final Widget child;
+  final Decoration decoration;
 
-  CountButton({
+  CustomButton({
     Key key,
     this.bgColor = kWhiteColor,
     this.textColor = kPrimaryColor,
@@ -20,6 +22,8 @@ class CountButton extends StatelessWidget {
     this.borderColor = kPrimaryColor,
     this.text,
     this.count = 0,
+    this.child,
+    this.decoration,
   }) : super(key: key);
 
   @override
@@ -28,33 +32,34 @@ class CountButton extends StatelessWidget {
     return Container(
       width: size.width,
       child: DecoratedBox(
-          decoration: BoxDecoration(
-            color: bgColor,
-            border: Border(
-              bottom: BorderSide(width: 1, color: borderColor),
-            ),
-          ),
+          decoration: decoration == null
+              ? BoxDecoration(
+                  color: bgColor,
+                  border: Border(
+                    bottom: BorderSide(width: 1, color: borderColor),
+                  ),
+                )
+              : decoration,
           child: Stack(
             children: [
               TextButton(
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    textBaseline: TextBaseline.ideographic,
-                    children: [
-                      Text(
-                        text,
-                        style: GoogleFonts.montserrat(
-                          color: textColor,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                child: child == null
+                    ? Padding(
+                        padding: const EdgeInsets.only(left: 5.0),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            text,
+                            style: GoogleFonts.montserrat(
+                              color: textColor,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
-                      ),
-
-                    ],
-                  ),
-                ),
+                      )
+                    : child,
                 onPressed: onPressed,
               ),
               Positioned.fill(
@@ -64,16 +69,13 @@ class CountButton extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 3),
-                        child: Container(
-                          padding: EdgeInsets.symmetric(horizontal: 4),
-                          child: Text(
-                            count.toString(),
-                            style: GoogleFonts.montserrat(
-                              color: textColor,
-                              fontSize: 18,
-                            ),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 4),
+                        child: Text(
+                          count.toString(),
+                          style: GoogleFonts.montserrat(
+                            color: textColor,
+                            fontSize: 18,
                           ),
                         ),
                       ),
