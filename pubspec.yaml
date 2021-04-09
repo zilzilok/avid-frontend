@@ -68,6 +68,8 @@ dependencies:
   flutter_html: ^1.2.0
   # drop-down refresh
   pull_to_refresh: ^1.6.4
+  # rating stars
+  smooth_star_rating: ^1.1.1
 
 flutter_launcher_name:
   name: "AviD"

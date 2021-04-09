@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:avid_frontend/components/app_utils.dart';
@@ -13,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:html/parser.dart';
+import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class GamePage extends StatefulWidget {
   final GameResult game;
@@ -28,6 +30,9 @@ class GamePage extends StatefulWidget {
 
 class _GamePageState extends State<GamePage> {
   final GameResult game;
+  final TextEditingController _reviewController = TextEditingController();
+  double _rating = 5.0;
+
 
   _GamePageState(this.game);
 
@@ -107,82 +112,14 @@ class _GamePageState extends State<GamePage> {
                                       borderColor: kPrimaryColor,
                                       bgColor: kWhiteColor,
                                       textColor: kPrimaryColor,
-                                      onPressed: () async {
-                                        setState(() {
-                                          game.has = false;
-                                        });
-                                        var connectivityResult =
-                                            await Connectivity()
-                                                .checkConnectivity();
-                                        if (connectivityResult !=
-                                            ConnectivityResult.none) {
-                                          var statusCode =
-                                              await UserApi.removeGame(
-                                                  game.alias);
-                                          if (statusCode ==
-                                                  HttpStatus.forbidden ||
-                                              statusCode ==
-                                                  HttpStatus.unauthorized) {
-                                            AuthUtils.deleteJwt();
-                                            Phoenix.rebirth(context);
-                                          }
-                                          if (statusCode != HttpStatus.ok) {
-                                            setState(() {
-                                              game.has = true;
-                                            });
-                                            AppUtils.displaySnackBar(context,
-                                                "Ошибка удаления игры.");
-                                          }
-                                        } else {
-                                          setState(() {
-                                            game.has = true;
-                                          });
-                                          AppUtils.displaySnackBar(context,
-                                              "Отсутствует подключение к интернету.");
-                                        }
-                                      },
+                                      onPressed: _removePressed,
                                     )
                                   : RoundedButton(
                                       widthPc: 0.8,
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 13, horizontal: 20),
                                       text: "добавить игру",
-                                      onPressed: () async {
-                                        setState(() {
-                                          game.has = true;
-                                        });
-                                        var connectivityResult =
-                                            await Connectivity()
-                                                .checkConnectivity();
-                                        if (connectivityResult !=
-                                            ConnectivityResult.none) {
-                                          var statusCode =
-                                              await UserApi.addGame(
-                                                  game.alias, "", 5);
-
-                                          if (statusCode ==
-                                                  HttpStatus.forbidden ||
-                                              statusCode ==
-                                                  HttpStatus.unauthorized) {
-                                            AuthUtils.deleteJwt();
-                                            Phoenix.rebirth(context);
-                                          }
-
-                                          if (statusCode != HttpStatus.ok) {
-                                            setState(() {
-                                              game.has = false;
-                                            });
-                                            AppUtils.displaySnackBar(context,
-                                                "Ошибка добавления игры.");
-                                          }
-                                        } else {
-                                          setState(() {
-                                            game.has = false;
-                                          });
-                                          AppUtils.displaySnackBar(context,
-                                              "Отсутствует подключение к интернету.");
-                                        }
-                                      },
+                                      onPressed: _reviewDialog,
                                     ),
                             ),
                             Expanded(
@@ -312,10 +249,232 @@ class _GamePageState extends State<GamePage> {
     );
   }
 
+  _removePressed() async {
+    setState(() {
+      game.has = false;
+    });
+    var connectivityResult = await Connectivity().checkConnectivity();
+    if (connectivityResult != ConnectivityResult.none) {
+      var statusCode = await UserApi.removeGame(game.alias);
+      if (statusCode == HttpStatus.forbidden ||
+          statusCode == HttpStatus.unauthorized) {
+        AuthUtils.deleteJwt();
+        Phoenix.rebirth(context);
+      }
+      if (statusCode != HttpStatus.ok) {
+        setState(() {
+          game.has = true;
+        });
+        AppUtils.displaySnackBar(context, "Ошибка удаления игры.");
+      }
+    } else {
+      setState(() {
+        game.has = true;
+      });
+      AppUtils.displaySnackBar(context, "Отсутствует подключение к интернету.");
+    }
+  }
+
+  _reviewDialog() {
+    Size size = MediaQuery.of(context).size;
+    double width = size.width * 0.8;
+    double height = size.height * 0.4;
+    return showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        var mediaQuery = MediaQuery.of(context);
+        return GestureDetector(
+          onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+          child: Material(
+            color: Colors.transparent,
+            child: Container(
+              padding: mediaQuery.viewInsets,
+              color: Color.fromRGBO(0, 0, 0, 0.5),
+              child: Center(
+                child: Container(
+                  decoration: BoxDecoration(
+                    boxShadow: <BoxShadow>[
+                      BoxShadow(
+                        spreadRadius: 1.0,
+                        color: Colors.black54,
+                        offset: Offset(5.0, 5.0),
+                        blurRadius: 30.0,
+                      )
+                    ],
+                    borderRadius: BorderRadius.all(Radius.circular(22)),
+                    color: const Color.fromRGBO(240, 240, 240, 1.0),
+                  ),
+                  height: height,
+                  width: width,
+                  child: Column(
+                    children: <Widget>[
+                      Stack(
+                        children: <Widget>[
+                          Container(
+                            alignment: Alignment.center,
+                            height: height,
+                            padding: EdgeInsets.only(top: 10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.symmetric(vertical: 10),
+                                  child: Text(
+                                    "Оставьте отзыв и оценку",
+                                    textAlign: TextAlign.center,
+                                    style: GoogleFonts.montserrat(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 18),
+                                  ),
+                                  alignment: Alignment.center,
+                                ),
+                                SmoothStarRating(
+                                  allowHalfRating: true,
+                                  onRated: (rating) {
+                                    _rating = rating;
+                                  },
+                                  starCount: 5,
+                                  rating: 5,
+                                  size: 35.0,
+                                  color: kPrimaryColor,
+                                  borderColor: kPrimaryColor,
+                                ),
+                                Expanded(
+                                  flex: 5,
+                                  child: Padding(
+                                    padding: EdgeInsets.all(10),
+                                    child: TextField(
+                                      controller: _reviewController,
+                                      maxLines: null,
+                                      maxLength: 100,
+                                      keyboardType: TextInputType.text,
+                                      style: GoogleFonts.montserrat(fontSize: 16),
+                                      decoration: InputDecoration(
+                                        border: OutlineInputBorder(
+                                          borderSide: BorderSide(color: kWhiteColor, width: 1.0),
+                                        ),
+                                        hintMaxLines: 1,
+                                        hintText: "Отзыв об игре",
+                                        hintStyle:
+                                        GoogleFonts.montserrat(fontSize: 16),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 2,
+                                  child: Container(
+                                    width: double.infinity,
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        primary: kPrimaryColor,
+                                        side: BorderSide.none,
+                                        padding: EdgeInsets.all(0),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.only(
+                                            bottomLeft: Radius.circular(22),
+                                            bottomRight: Radius.circular(22),
+                                          ),
+                                        ),
+                                      ),
+                                      child: Text(
+                                        "Подтвердить",
+                                        style: GoogleFonts.montserrat(
+                                          color: kWhiteColor,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                        _addPressed();
+                                      },
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(top: 8),
+                            height: 26,
+                            alignment: Alignment.topRight,
+                            child: FloatingActionButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Icon(
+                                Icons.close,
+                                color: Colors.black87,
+                                size: 19,
+                              ),
+                              backgroundColor: Color.fromRGBO(240, 240, 240, 0.8),
+                              elevation: 2,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  _addPressed() async {
+    setState(() {
+      game.has = true;
+    });
+    var connectivityResult = await Connectivity().checkConnectivity();
+    if (connectivityResult != ConnectivityResult.none) {
+      var statusCode = await UserApi.addGame(game.alias,
+          _reviewController.text, _rating);
+
+      if (statusCode == HttpStatus.forbidden ||
+          statusCode == HttpStatus.unauthorized) {
+        AuthUtils.deleteJwt();
+        Phoenix.rebirth(context);
+      }
+
+      if (statusCode != HttpStatus.ok) {
+        setState(() {
+          game.has = false;
+        });
+        AppUtils.displaySnackBar(context, "Ошибка добавления игры.");
+      }
+    } else {
+      setState(() {
+        game.has = false;
+      });
+      AppUtils.displaySnackBar(context, "Отсутствует подключение к интернету.");
+    }
+  }
+
   String _parseHtmlString(String htmlString) {
     final document = parse(htmlString);
     final String parsedString = parse(document.body.text).documentElement.text;
 
     return parsedString;
+  }
+}
+
+class _SystemPadding extends StatelessWidget {
+  final Widget child;
+
+  _SystemPadding({Key key, this.child}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    var mediaQuery = MediaQuery.of(context);
+    return new AnimatedContainer(
+        padding: mediaQuery.padding,
+        duration: const Duration(milliseconds: 300),
+        child: child);
   }
 }
