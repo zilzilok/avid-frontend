@@ -89,9 +89,7 @@ class _ProfileBodyState extends State<ProfileBody> {
                             GamesButton(),
                             CountButton(
                               text: "клубы",
-                              onPressed: () {
-                                _refreshController.refreshCompleted();
-                              },
+                              onPressed: () {},
                             ),
                             // RoundedButton(
                             //   text: "Выйти из аккаунта",

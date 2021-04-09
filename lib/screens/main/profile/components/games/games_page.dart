@@ -57,7 +57,7 @@ class GamesPage extends StatelessWidget {
                           children: <Widget>[
                             SizedBox(height: size.height * 0.01),
                             Text(
-                              "Мои игры",
+                              "Библиотека игр",
                               style: GoogleFonts.montserrat(
                                 fontWeight: FontWeight.bold,
                                 color: kPrimaryColor,
