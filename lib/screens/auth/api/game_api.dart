@@ -57,6 +57,7 @@ class GameApi {
     log("GameApi.getRecommendedGamesJson: response body = $body");
 
     Iterable iterableParsedJson = json.decode(body);
+    log(iterableParsedJson.toString());
 
     if (res.statusCode == HttpStatus.ok && iterableParsedJson.isNotEmpty) {
       return List<SearchGameResult>.from(
@@ -89,6 +90,9 @@ class GameResult {
   final String description;
   final int playersMin;
   final int playersMax;
+  final int playtimeMin;
+  final int playtimeMax;
+  final int playersAgeMin;
   final int year;
   final String review;
   final double rating;
@@ -99,6 +103,9 @@ class GameResult {
     this.description,
     this.playersMin,
     this.playersMax,
+    this.playtimeMin,
+    this.playtimeMax,
+    this.playersAgeMin,
     this.year,
     this.alias,
     this.title,
@@ -120,6 +127,9 @@ class GameResult {
       year: parsedJson["game"]["year"],
       playersMin: parsedJson["game"]["playersMin"],
       playersMax: parsedJson["game"]["playersMax"],
+      playtimeMin: parsedJson["game"]["playtimeMin"],
+      playtimeMax: parsedJson["game"]["playtimeMax"],
+      playersAgeMin: parsedJson["game"]["playersAgeMin"],
       has: true,
       rating: parsedJson["rating"],
       averageRating: parsedJson["game"]["averageRating"],
@@ -137,6 +147,9 @@ class SearchGameResult extends GameResult {
     String description,
     int playersMin,
     int playersMax,
+    int playtimeMin,
+    int playtimeMax,
+    int playersAgeMin,
     int year,
     bool has,
     double averageRating,
@@ -149,6 +162,9 @@ class SearchGameResult extends GameResult {
           description: description,
           playersMin: playersMin,
           playersMax: playersMax,
+          playtimeMin: playtimeMin,
+          playtimeMax: playtimeMax,
+          playersAgeMin: playersAgeMin,
           year: year,
           has: has,
           averageRating: averageRating,
@@ -165,6 +181,9 @@ class SearchGameResult extends GameResult {
       year: parsedJson["boardGames"]["year"],
       playersMin: parsedJson["boardGames"]["playersMin"],
       playersMax: parsedJson["boardGames"]["playersMax"],
+      playtimeMin: parsedJson["boardGames"]["playtimeMin"],
+      playtimeMax: parsedJson["boardGames"]["playtimeMax"],
+      playersAgeMin: parsedJson["boardGames"]["playersAgeMin"],
       has: parsedJson["has"],
       rating: parsedJson["rating"],
       averageRating: parsedJson["boardGames"]["averageRating"],

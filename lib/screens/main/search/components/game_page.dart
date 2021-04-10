@@ -34,7 +34,7 @@ class _GamePageState extends State<GamePage> {
   final TextEditingController _reviewController = TextEditingController();
   double _rating = 5.0;
   RefreshController _refreshController =
-  RefreshController(initialRefresh: false);
+      RefreshController(initialRefresh: false);
 
   _GamePageState(this.game);
 
@@ -149,101 +149,125 @@ class _GamePageState extends State<GamePage> {
                                         Padding(
                                           padding: EdgeInsets.only(
                                               bottom: size.height * 0.01),
-                                          child: ReviewsButton(game: game,),
+                                          child: ReviewsButton(
+                                            game: game,
+                                          ),
                                         ),
-                                        Padding(
-                                            padding: EdgeInsets.only(
-                                                bottom: size.height * 0.01),
-                                            child: Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.end,
-                                              children: [
-                                                Text.rich(
+                                        Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          children: [
+                                            Text.rich(
+                                              TextSpan(
+                                                style: GoogleFonts.montserrat(
+                                                    fontSize: 16),
+                                                children: <TextSpan>[
                                                   TextSpan(
-                                                    style: GoogleFonts.montserrat(
-                                                        fontSize: 16),
-                                                    children: <TextSpan>[
-                                                      TextSpan(
-                                                        text: "Рейтинг:\t",
-                                                        style: GoogleFonts
-                                                            .montserrat(
-                                                          fontSize: 16,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                      TextSpan(
-                                                          text: game.averageRating
-                                                              .toString()),
-                                                    ],
+                                                    text: "Рейтинг:\t",
+                                                    style:
+                                                        GoogleFonts.montserrat(
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
                                                   ),
-                                                ),
-                                                Icon(
-                                                  game.averageRating == 5.0
-                                                      ? Icons.star
-                                                      : (game.averageRating == 0.0
-                                                          ? Icons.star_border
-                                                          : Icons.star_half),
-                                                  color: kPrimaryColor,
-                                                ),
-                                              ],
-                                            )),
-                                        Padding(
-                                          padding: EdgeInsets.only(
-                                              bottom: size.height * 0.01),
-                                          child: Text.rich(
-                                            TextSpan(
-                                              style: GoogleFonts.montserrat(
-                                                  fontSize: 16),
-                                              children: <TextSpan>[
-                                                TextSpan(
-                                                  text: "Год создания:\t",
-                                                  style: GoogleFonts.montserrat(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                                TextSpan(
-                                                    text: game.year.toString()),
-                                              ],
+                                                  TextSpan(
+                                                      text: game.averageRating
+                                                          .toString()),
+                                                ],
+                                              ),
                                             ),
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: EdgeInsets.only(
-                                              bottom: size.height * 0.01),
-                                          child: Text.rich(
-                                            TextSpan(
-                                              style: GoogleFonts.montserrat(
-                                                  fontSize: 16),
-                                              children: <TextSpan>[
-                                                TextSpan(
-                                                  text: "Количество игроков:\t",
-                                                  style: GoogleFonts.montserrat(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                                TextSpan(
-                                                    text: game.playersMin
-                                                        .toString()),
-                                                TextSpan(text: "-"),
-                                                TextSpan(
-                                                    text: game.playersMax
-                                                        .toString()),
-                                              ],
+                                            Icon(
+                                              game.averageRating == 5.0
+                                                  ? Icons.star
+                                                  : (game.averageRating == 0.0
+                                                      ? Icons.star_border
+                                                      : Icons.star_half),
+                                              color: kPrimaryColor,
                                             ),
-                                          ),
+                                          ],
                                         ),
-                                        Padding(
-                                          padding: EdgeInsets.only(
-                                              bottom: size.height * 0.01),
-                                          child: Text(
-                                            "Описание:",
+                                        Text.rich(
+                                          TextSpan(
                                             style: GoogleFonts.montserrat(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 16,
-                                            ),
+                                                fontSize: 16),
+                                            children: <TextSpan>[
+                                              TextSpan(
+                                                text: "Год создания:\t",
+                                                style: GoogleFonts.montserrat(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              TextSpan(
+                                                  text: game.year.toString()),
+                                            ],
+                                          ),
+                                        ),
+                                        Text.rich(
+                                          TextSpan(
+                                            style: GoogleFonts.montserrat(
+                                                fontSize: 16),
+                                            children: <TextSpan>[
+                                              TextSpan(
+                                                text:
+                                                    "Возрастное ограничение:\t",
+                                                style: GoogleFonts.montserrat(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              TextSpan(
+                                                  text:
+                                                      "${game.playersAgeMin}+"),
+                                            ],
+                                          ),
+                                        ),
+                                        Text.rich(
+                                          TextSpan(
+                                            style: GoogleFonts.montserrat(
+                                                fontSize: 16),
+                                            children: <TextSpan>[
+                                              TextSpan(
+                                                text: "Время игры:\t",
+                                                style: GoogleFonts.montserrat(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              TextSpan(
+                                                  text:
+                                                      "${game.playtimeMin}-${game.playtimeMax} минут"),
+                                            ],
+                                          ),
+                                        ),
+                                        Text.rich(
+                                          TextSpan(
+                                            style: GoogleFonts.montserrat(
+                                                fontSize: 16),
+                                            children: <TextSpan>[
+                                              TextSpan(
+                                                text: "Количество игроков:\t",
+                                                style: GoogleFonts.montserrat(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              TextSpan(
+                                                  text: game.playersMin
+                                                      .toString()),
+                                              TextSpan(text: "-"),
+                                              TextSpan(
+                                                  text: game.playersMax
+                                                      .toString()),
+                                            ],
+                                          ),
+                                        ),
+                                        Text(
+                                          "Описание:",
+                                          style: GoogleFonts.montserrat(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16,
                                           ),
                                         ),
                                         Text(_parseHtmlString(game.description),
