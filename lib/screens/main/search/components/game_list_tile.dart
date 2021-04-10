@@ -61,47 +61,54 @@ class GameListTile extends StatelessWidget {
                         ),
                       ),
                       game.rating != null
-                          ? Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.supervised_user_circle_outlined,
-                                      color: kPrimaryColor,
-                                    ),
-                                    Text(
-                                      game.averageRating.toString(),
-                                      style: GoogleFonts.montserrat(),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Icon(
-                                      CupertinoIcons.profile_circled,
-                                      color: kPrimaryColor,
-                                    ),
-                                    Text(
-                                      game.rating.toString(),
-                                      style: GoogleFonts.montserrat(),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                          ? FittedBox(
+                              fit: BoxFit.contain,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        Icons.supervised_user_circle_outlined,
+                                        color: kPrimaryColor,
+                                      ),
+                                      Text(
+                                        game.averageRating.toString(),
+                                        style: GoogleFonts.montserrat(),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        CupertinoIcons.profile_circled,
+                                        color: kPrimaryColor,
+                                      ),
+                                      Text(
+                                        game.rating.toString(),
+                                        style: GoogleFonts.montserrat(),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             )
-                          : Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.supervised_user_circle_outlined,
-                                  color: kPrimaryColor,
-                                ),
-                                Text(
-                                  game.averageRating.toString(),
-                                  style: GoogleFonts.montserrat(),
-                                ),
-                              ],
+                          : FittedBox(
+                              fit: BoxFit.contain,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.supervised_user_circle_outlined,
+                                    color: kPrimaryColor,
+                                  ),
+                                  Text(
+                                    game.averageRating.toString(),
+                                    style: GoogleFonts.montserrat(),
+                                  ),
+                                ],
+                              ),
                             ),
                     ],
                   ),
@@ -110,7 +117,8 @@ class GameListTile extends StatelessWidget {
               Flexible(
                 flex: 2,
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 10, right: 10, bottom: 10),
+                  padding:
+                      const EdgeInsets.only(top: 10, right: 10, bottom: 10),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [

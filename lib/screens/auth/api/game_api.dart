@@ -190,7 +190,7 @@ class ReviewResult {
       owner: UserDao.fromJson(parsedJson["owner"]),
       review: parsedJson["review"],
       rating: parsedJson["rating"],
-      creatingDate: parsedJson["creatingDate"],
+      creatingDate: DateTime.parse(parsedJson["creatingDateTime"]).toLocal(),
     );
   }
 }

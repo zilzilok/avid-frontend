@@ -16,6 +16,8 @@ class ReviewListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var imageRadius = 30.0;
+    var date = review.creatingDate.toString();
+    date = date.substring(0, date.lastIndexOf(":"));
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 10),
       child: GestureDetector(
@@ -76,20 +78,20 @@ class ReviewListTile extends StatelessWidget {
                             review.owner.username,
                             style: GoogleFonts.montserrat(
                               fontWeight: FontWeight.w500,
-                              fontSize: 18,
+                              fontSize: 16,
                             ),
                           ),
-                          // Text(review.creatingDate.toString(),
-                          //   style: GoogleFonts.montserrat(
-                          //     fontSize: 16,
-                          //   ),
-                          // ),
+                          Text(date,
+                            style: GoogleFonts.montserrat(
+                              fontSize: 12,
+                            ),
+                          ),
                           Text(
                             review.owner.gender == "MALE"
                                 ? "оставил отзыв:"
                                 : "оставила отзыв:",
                             style: GoogleFonts.montserrat(
-                              fontSize: 16,
+                              fontSize: 12,
                             ),
                           ),
                         ],
