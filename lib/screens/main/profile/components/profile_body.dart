@@ -1,10 +1,15 @@
+import 'dart:developer';
+
+import 'package:avid_frontend/components/app_utils.dart';
 import 'package:avid_frontend/res/constants.dart';
+import 'package:avid_frontend/screens/auth/components/auth_utils.dart';
 import 'package:avid_frontend/screens/main/profile/components/custom_button.dart';
 import 'package:avid_frontend/screens/main/profile/components/games/games_button.dart';
 import 'package:avid_frontend/screens/main/profile/components/profile_bg.dart';
 import 'package:avid_frontend/screens/main/profile/components/profile_info.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -43,14 +48,7 @@ class _ProfileBodyState extends State<ProfileBody> {
                 width: size.width,
                 child: Align(
                   alignment: Alignment.centerRight,
-                  child: IconButton(
-                    onPressed: () {},
-                    icon: Icon(
-                      CupertinoIcons.bars,
-                      size: size.width * 0.1,
-                      color: kWhiteColor,
-                    ),
-                  ),
+                  child: _buildPopupMenuButton(),
                 ),
               ),
               Expanded(
@@ -86,16 +84,9 @@ class _ProfileBodyState extends State<ProfileBody> {
                               onPressed: () {},
                             ),
                             GamesButton(),
-                            CustomButton(
-                              text: "клубы",
-                              onPressed: () {},
-                            ),
-                            // RoundedButton(
-                            //   text: "Выйти из аккаунта",
-                            //   onPressed: () {
-                            //     AuthUtils.deleteJwt();
-                            //     Phoenix.rebirth(context);
-                            //   },
+                            // CustomButton(
+                            //   text: "клубы",
+                            //   onPressed: () {},
                             // ),
                           ],
                         ),
@@ -107,6 +98,43 @@ class _ProfileBodyState extends State<ProfileBody> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  _buildPopupMenuButton() {
+    return PopupMenuButton(
+      enableFeedback: true,
+      itemBuilder: (_) => <PopupMenuItem<String>>[
+        PopupMenuItem<String>(
+            child: ListTile(
+              trailing: Icon(
+                Icons.exit_to_app,
+                color: kPrimaryColor,
+              ),
+              title: Text(
+                'Выйти',
+                style: GoogleFonts.montserrat(
+                  fontSize: 18,
+                ),
+              ),
+            ),
+            value: 'exit')
+      ],
+      offset: Offset(20, 20),
+      onSelected: (String value) {
+        if (value == 'exit') {
+          AppUtils.confirmDialog(
+              context, "вы уверены что хотите выйти из аккаунта?", () {
+            AuthUtils.deleteJwt();
+            Phoenix.rebirth(context);
+          });
+        }
+      },
+      icon: Icon(
+        Icons.menu,
+        size: 40,
+        color: kWhiteColor,
       ),
     );
   }
