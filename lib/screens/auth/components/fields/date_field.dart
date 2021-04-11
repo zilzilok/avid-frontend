@@ -26,8 +26,12 @@ class _DateFieldState extends State<DateField> {
 
   @override
   void initState() {
-    _currDate = DateTime.now();
-    dateController.text = DateField.DATE_FORMAT.format(_currDate);
+    if(dateController.text.isEmpty) {
+      _currDate = DateTime.now();
+      dateController.text = DateField.SQL_DATE_FORMAT.format(_currDate);
+    } else {
+      _currDate = DateField.SQL_DATE_FORMAT.parse(dateController.text);
+    }
     super.initState();
   }
 

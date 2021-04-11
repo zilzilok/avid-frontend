@@ -18,6 +18,7 @@ class WelcomeBody extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
             RoundedButton(
+              width: size.width * 0.8,
               text: "войти в аккаунт",
               bgColor: kWhiteColor,
               textColor: kPrimaryColor,
@@ -32,6 +33,7 @@ class WelcomeBody extends StatelessWidget {
             SizedBox(height: size.height * 0.03),
             RoundedButton(
               text: "зарегистрироваться",
+              width: size.width * 0.8,
               bgColor: kPrimaryColor,
               borderColor: kWhiteColor,
               textColor: kWhiteColor,

@@ -1,12 +1,13 @@
-import 'dart:developer';
 
 import 'package:avid_frontend/components/app_utils.dart';
+import 'package:avid_frontend/components/rounded_button.dart';
 import 'package:avid_frontend/res/constants.dart';
 import 'package:avid_frontend/screens/auth/components/auth_utils.dart';
 import 'package:avid_frontend/screens/main/profile/components/custom_button.dart';
 import 'package:avid_frontend/screens/main/profile/components/games/games_button.dart';
 import 'package:avid_frontend/screens/main/profile/components/profile_bg.dart';
 import 'package:avid_frontend/screens/main/profile/components/profile_info.dart';
+import 'package:avid_frontend/screens/main/profile/components/profile_update_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
@@ -79,6 +80,22 @@ class _ProfileBodyState extends State<ProfileBody> {
                             SizedBox(height: size.height * 0.02),
                             ProfileInfo(),
                             SizedBox(height: size.height * 0.02),
+                            RoundedButton(
+                              bgColor: kWhiteColor,
+                              borderColor: kPrimaryColor,
+                              textColor: kPrimaryColor,
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 0, horizontal: 15),
+                              text: "редактировать профиль",
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) {
+                                    return ProfileUpdatePage();
+                                  }),
+                                );
+                              },
+                            ),
                             CustomButton(
                               text: "друзья",
                               onPressed: () {},

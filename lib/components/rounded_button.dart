@@ -9,7 +9,7 @@ class RoundedButton extends StatelessWidget {
   final Color bgColor;
   final Color textColor;
   final Color borderColor;
-  final double widthPc;
+  final double width;
   final EdgeInsetsGeometry padding;
 
   RoundedButton({
@@ -19,15 +19,14 @@ class RoundedButton extends StatelessWidget {
     this.onPressed,
     this.borderColor,
     this.text,
-    this.widthPc = 0.7,
+    this.width,
     this.padding = const EdgeInsets.symmetric(vertical: 17, horizontal: 20),
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Container(
-      width: size.width * widthPc,
+      width: width,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           primary: bgColor,

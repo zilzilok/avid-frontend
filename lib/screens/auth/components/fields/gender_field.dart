@@ -21,7 +21,11 @@ class _GenderFieldState extends State<GenderField> {
 
   @override
   void initState() {
-    genderController.text = _genders[_genderId];
+    if(genderController.text.isEmpty){
+      genderController.text = _genders[_genderId];
+    }else {
+      _genderId = _genders.indexOf(genderController.text);
+    }
     super.initState();
   }
 
@@ -61,7 +65,6 @@ class _GenderFieldState extends State<GenderField> {
               ),
               groupValue: _genderId,
               activeColor: kPrimaryColor,
-              // tileColor: ,
               onChanged: (value) {
                 setState(() {
                   _genderId = value;
