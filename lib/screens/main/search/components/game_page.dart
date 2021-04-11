@@ -120,7 +120,7 @@ class _GamePageState extends State<GamePage> {
                                     vertical: size.height * 0.02),
                                 child: game.has
                                     ? RoundedButton(
-                                        widthPc: 0.8,
+                                        width: size.width * 0.8,
                                         padding: const EdgeInsets.symmetric(
                                             vertical: 13, horizontal: 20),
                                         text: "убрать из библиотеки",
@@ -130,7 +130,7 @@ class _GamePageState extends State<GamePage> {
                                         onPressed: _confirmDialog,
                                       )
                                     : RoundedButton(
-                                        widthPc: 0.8,
+                                        width: size.width * 0.8,
                                         padding: const EdgeInsets.symmetric(
                                             vertical: 13, horizontal: 20),
                                         text: "добавить в библиотеку",

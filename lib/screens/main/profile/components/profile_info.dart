@@ -28,7 +28,7 @@ class ProfileInfo extends StatelessWidget {
             Phoenix.rebirth(context);
           }
           if (res.statusCode == HttpStatus.ok) {
-            var user = UserDao.fromJson(jsonDecode(res.body));
+            var user = UserDao.fromJson(jsonDecode(utf8.decode(res.bodyBytes)));
             int years = user.birthdate != null && user.birthdate.isNotEmpty
                 ? _countYears(user.birthdate)
                 : -1;
@@ -107,6 +107,11 @@ class ProfileInfo extends StatelessWidget {
                                     : "",
                                 style: GoogleFonts.montserrat(fontSize: 20),
                               ),
+                              if (!user.active)
+                                Text(
+                                  "почта не подтверждена",
+                                  style: GoogleFonts.montserrat(fontSize: 14, color: Colors.red),
+                                ),
                             ],
                           ),
                         ],

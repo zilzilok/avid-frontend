@@ -42,7 +42,7 @@ class InputField extends StatelessWidget {
               borderSide: BorderSide(width: 1, color: kPrimaryAccentColor)),
           errorStyle: GoogleFonts.montserrat(fontSize: 14),
         ),
-        style: GoogleFonts.montserrat(fontSize: 16, color: kTextGreyColor),
+        style: GoogleFonts.montserrat(fontSize: 16),
       ),
     );
   }

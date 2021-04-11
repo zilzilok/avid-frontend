@@ -9,19 +9,23 @@ import 'package:image_picker/image_picker.dart';
 
 class AvatarField extends StatefulWidget {
   final TextEditingController _imageController;
+  final bool _network;
 
-  const AvatarField({Key key, @required imageController})
+  const AvatarField({Key key, @required imageController, network = false})
       : _imageController = imageController,
+        _network = network,
         super(key: key);
 
   @override
-  _AvatarFieldState createState() => _AvatarFieldState(this._imageController);
+  _AvatarFieldState createState() =>
+      _AvatarFieldState(this._imageController, this._network);
 }
 
 class _AvatarFieldState extends State<AvatarField> {
   TextEditingController _imageController;
+  bool _network;
 
-  _AvatarFieldState(this._imageController);
+  _AvatarFieldState(this._imageController, this._network);
 
   @override
   Widget build(BuildContext context) {
@@ -36,15 +40,25 @@ class _AvatarFieldState extends State<AvatarField> {
           radius: imageRadius + 2,
           backgroundColor: kPrimaryLightColor,
           child: _imageController != null && _imageController.text.isNotEmpty
-              ? ClipRRect(
-                  borderRadius: BorderRadius.circular(imageRadius),
-                  child: Image.file(
-                    File(_imageController.text),
-                    width: 2 * imageRadius,
-                    height: 2 * imageRadius,
-                    fit: BoxFit.cover,
-                  ),
-                )
+              ? _network
+                  ? ClipRRect(
+                      borderRadius: BorderRadius.circular(imageRadius),
+                      child: Image.network(
+                        _imageController.text,
+                        width: 2 * imageRadius,
+                        height: 2 * imageRadius,
+                        fit: BoxFit.cover,
+                      ),
+                    )
+                  : ClipRRect(
+                      borderRadius: BorderRadius.circular(imageRadius),
+                      child: Image.file(
+                        File(_imageController.text),
+                        width: 2 * imageRadius,
+                        height: 2 * imageRadius,
+                        fit: BoxFit.cover,
+                      ),
+                    )
               : Container(
                   decoration: BoxDecoration(
                     color: kLightGreyColor,
@@ -132,12 +146,13 @@ class _AvatarFieldState extends State<AvatarField> {
   }
 
   _imageFrom(ImageSource imageSource) async {
-    PickedFile pickedFile = await ImagePicker()
-        .getImage(source: imageSource, imageQuality: 50);
-    if(pickedFile != null) {
+    PickedFile pickedFile =
+        await ImagePicker().getImage(source: imageSource, imageQuality: 50);
+    if (pickedFile != null) {
       File file = File(pickedFile.path);
       setState(() {
         _imageController.text = file.path;
+        _network = false;
       });
     }
   }
