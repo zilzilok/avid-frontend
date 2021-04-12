@@ -3,7 +3,7 @@ import 'package:avid_frontend/components/app_utils.dart';
 import 'package:avid_frontend/components/rounded_button.dart';
 import 'package:avid_frontend/res/constants.dart';
 import 'package:avid_frontend/screens/auth/components/auth_utils.dart';
-import 'package:avid_frontend/screens/main/profile/components/custom_button.dart';
+import 'package:avid_frontend/screens/main/profile/components/friends/friends_button.dart';
 import 'package:avid_frontend/screens/main/profile/components/games/games_button.dart';
 import 'package:avid_frontend/screens/main/profile/components/profile_bg.dart';
 import 'package:avid_frontend/screens/main/profile/components/profile_info.dart';
@@ -102,10 +102,7 @@ class _ProfileBodyState extends State<ProfileBody> {
                                         );
                                       },
                                     ),
-                                    CustomButton(
-                                      text: "друзья",
-                                      onPressed: () {},
-                                    ),
+                                    FriendsButton(parentRefreshController: _refreshController),
                                     GamesButton(),
                                     // CustomButton(
                                     //   text: "клубы",

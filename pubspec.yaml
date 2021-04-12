@@ -70,6 +70,8 @@ dependencies:
   pull_to_refresh: ^1.6.4
   # rating stars
   smooth_star_rating: ^1.1.1
+  # search widget
+  material_floating_search_bar: ^0.3.3
 
 flutter_launcher_name:
   name: "AviD"

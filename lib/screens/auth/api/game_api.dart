@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:avid_frontend/screens/auth/api/api_info.dart';
-import 'package:avid_frontend/screens/main/profile/components/user_dto.dart';
+import 'package:avid_frontend/screens/auth/api/user_api.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
@@ -75,8 +75,8 @@ class GameApi {
       uri,
       headers: headers,
     );
-    log("UserApi.getReviews: response statusCode = ${res.statusCode}");
-    log("UserApi.getReviews: response body = ${res.body}");
+    log("GameApi.getReviews: response statusCode = ${res.statusCode}");
+    log("GameApi.getReviews: response body = ${res.body}");
 
     return res;
   }
@@ -219,25 +219,25 @@ class SearchGameResult extends GameResult {
 
   factory SearchGameResult.fromJson(Map<String, dynamic> parsedJson) {
     return SearchGameResult(
-      alias: parsedJson["boardGames"]["alias"],
-      title: parsedJson["boardGames"]["titles"][0],
-      shortDescription: parsedJson["boardGames"]["descriptionShort"],
-      description: parsedJson["boardGames"]["description"],
-      imageURL: parsedJson["boardGames"]["photoUrl"],
-      year: parsedJson["boardGames"]["year"],
-      playersMin: parsedJson["boardGames"]["playersMin"],
-      playersMax: parsedJson["boardGames"]["playersMax"],
-      playtimeMin: parsedJson["boardGames"]["playtimeMin"],
-      playtimeMax: parsedJson["boardGames"]["playtimeMax"],
-      playersAgeMin: parsedJson["boardGames"]["playersAgeMin"],
+      alias: parsedJson["boardGame"]["alias"],
+      title: parsedJson["boardGame"]["titles"][0],
+      shortDescription: parsedJson["boardGame"]["descriptionShort"],
+      description: parsedJson["boardGame"]["description"],
+      imageURL: parsedJson["boardGame"]["photoUrl"],
+      year: parsedJson["boardGame"]["year"],
+      playersMin: parsedJson["boardGame"]["playersMin"],
+      playersMax: parsedJson["boardGame"]["playersMax"],
+      playtimeMin: parsedJson["boardGame"]["playtimeMin"],
+      playtimeMax: parsedJson["boardGame"]["playtimeMax"],
+      playersAgeMin: parsedJson["boardGame"]["playersAgeMin"],
       has: parsedJson["has"],
-      averageRating: parsedJson["boardGames"]["averageRating"],
+      averageRating: parsedJson["boardGame"]["averageRating"],
     );
   }
 }
 
 class ReviewResult {
-  final UserDao owner;
+  final UserDto owner;
   final String review;
   final double rating;
   final DateTime creatingDate;
@@ -251,7 +251,7 @@ class ReviewResult {
 
   factory ReviewResult.fromJson(Map<String, dynamic> parsedJson) {
     return ReviewResult(
-      owner: UserDao.fromJson(parsedJson["owner"]),
+      owner: UserDto.fromJson(parsedJson["owner"]),
       review: parsedJson["review"],
       rating: parsedJson["rating"],
       creatingDate: DateTime.parse(parsedJson["creatingDateTime"]).toLocal(),
@@ -261,7 +261,7 @@ class ReviewResult {
 
 class ReviewGameResult {
   final GameResult game;
-  final UserDao owner;
+  final UserDto owner;
   final DateTime creatingDate;
 
   ReviewGameResult({
@@ -273,7 +273,7 @@ class ReviewGameResult {
   factory ReviewGameResult.fromJson(Map<String, dynamic> parsedJson) {
     return ReviewGameResult(
       creatingDate: DateTime.parse(parsedJson["creatingDateTime"]).toLocal(),
-      owner: UserDao.fromJson(parsedJson["owner"]),
+      owner: UserDto.fromJson(parsedJson["owner"]),
       game: GameResult.fromJson(parsedJson),
     );
   }

@@ -6,7 +6,6 @@ import 'package:avid_frontend/res/constants.dart';
 import 'package:avid_frontend/screens/auth/api/user_api.dart';
 import 'package:avid_frontend/screens/auth/components/auth_utils.dart';
 import 'package:avid_frontend/screens/auth/components/fields/date_field.dart';
-import 'package:avid_frontend/screens/main/profile/components/user_dto.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
@@ -29,7 +28,7 @@ class ProfileInfo extends StatelessWidget {
             Phoenix.rebirth(context);
           }
           if (res.statusCode == HttpStatus.ok) {
-            var user = UserDao.fromJson(jsonDecode(utf8.decode(res.bodyBytes)));
+            var user = UserDto.fromJson(jsonDecode(utf8.decode(res.bodyBytes)));
             int years = user.birthdate != null && user.birthdate.isNotEmpty
                 ? _countYears(user.birthdate)
                 : -1;

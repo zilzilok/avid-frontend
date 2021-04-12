@@ -13,7 +13,6 @@ import 'package:avid_frontend/screens/auth/components/fields/gender_field.dart';
 import 'package:avid_frontend/screens/auth/components/fields/input_field.dart';
 import 'package:avid_frontend/screens/auth/components/validator.dart';
 import 'package:avid_frontend/screens/main/profile/components/profile_bg.dart';
-import 'package:avid_frontend/screens/main/profile/components/user_dto.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
@@ -137,7 +136,7 @@ class _ProfileUpdatePageState extends State<ProfileUpdatePage> {
             Phoenix.rebirth(context);
           }
           if (res.statusCode == HttpStatus.ok) {
-            var user = UserDao.fromJson(jsonDecode(utf8.decode(res.bodyBytes)));
+            var user = UserDto.fromJson(jsonDecode(utf8.decode(res.bodyBytes)));
             _imageController.text = user.photoPath;
             _firstNameController.text = user.firstName;
             _secondNameController.text = user.secondName;
