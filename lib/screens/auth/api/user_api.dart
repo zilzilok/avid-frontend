@@ -42,7 +42,7 @@ class UserApi {
     var authEntry = await ApiInfo.authorizationEntry();
 
     var request = http.MultipartRequest(
-        'POST', Uri.https(ApiInfo.BASE_URL, "/user/storage/upload"));
+        'POST', Uri.https(ApiInfo.BASE_URL, "/user/storage/update"));
     request.files.add(await http.MultipartFile.fromPath('file', fileName));
     request.headers.addAll(authEntry);
     var res = await http.Response.fromStream(await request.send());
