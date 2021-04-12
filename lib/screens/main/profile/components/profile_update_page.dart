@@ -5,7 +5,6 @@ import 'dart:io';
 
 import 'package:avid_frontend/components/app_utils.dart';
 import 'package:avid_frontend/res/constants.dart';
-import 'package:avid_frontend/screens/auth/api/game_api.dart';
 import 'package:avid_frontend/screens/auth/api/user_api.dart';
 import 'package:avid_frontend/screens/auth/components/auth_utils.dart';
 import 'package:avid_frontend/screens/auth/components/fields/avatar_field.dart';
@@ -15,13 +14,11 @@ import 'package:avid_frontend/screens/auth/components/fields/input_field.dart';
 import 'package:avid_frontend/screens/auth/components/validator.dart';
 import 'package:avid_frontend/screens/main/profile/components/profile_bg.dart';
 import 'package:avid_frontend/screens/main/profile/components/user_dto.dart';
-import 'package:avid_frontend/screens/main/search/components/game_list_tile.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 class ProfileUpdatePage extends StatefulWidget {

@@ -139,53 +139,59 @@ class SearchPlaceholder extends StatelessWidget {
             child: SafeArea(
               child: Align(
                 alignment: Alignment.center,
-                child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: size.width * 0.05),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      SizedBox(height: size.height * 0.01),
-                      Text(
-                        "Ваши рекомендации",
-                        style: GoogleFonts.montserrat(
-                          fontWeight: FontWeight.bold,
-                          color: kPrimaryColor,
-                          fontSize: 20,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    SizedBox(height: size.height * 0.01),
+                    Text(
+                      "Ваши рекомендации",
+                      style: GoogleFonts.montserrat(
+                        fontWeight: FontWeight.bold,
+                        color: kPrimaryColor,
+                        fontSize: 20,
+                      ),
+                    ),
+                    SizedBox(height: size.height * 0.01),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        physics: ScrollPhysics(),
+                        child: Container(
+                          margin: EdgeInsets.symmetric(
+                              horizontal: size.width * 0.05),
+                          child: FutureBuilder(
+                            future: GameApi.getRecommendedGamesJson(),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                var games =
+                                    snapshot.data as List<SearchGameResult>;
+                                return ListView.builder(
+                                    physics: NeverScrollableScrollPhysics(),
+                                    shrinkWrap: true,
+                                    itemCount: games.length,
+                                    itemBuilder: (context, index) {
+                                      return Padding(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 10),
+                                        child: GameListTile(game: games[index]),
+                                      );
+                                    });
+                              }
+                              return Center(
+                                child: SizedBox(
+                                  child: CircularProgressIndicator(
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                        kPrimaryColor),
+                                  ),
+                                  width: 40,
+                                  height: 40,
+                                ),
+                              );
+                            },
+                          ),
                         ),
                       ),
-                      SizedBox(height: size.height * 0.01),
-                      Expanded(
-                        child: FutureBuilder(
-                          future: GameApi.getRecommendedGamesJson(),
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              var games =
-                                  snapshot.data as List<SearchGameResult>;
-                              return ListView.builder(
-                                  itemCount: games.length,
-                                  itemBuilder: (context, index) {
-                                    return Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 10),
-                                      child: GameListTile(game: games[index]),
-                                    );
-                                  });
-                            }
-                            return Center(
-                              child: SizedBox(
-                                child: CircularProgressIndicator(
-                                  valueColor: AlwaysStoppedAnimation<Color>(
-                                      kPrimaryColor),
-                                ),
-                                width: 40,
-                                height: 40,
-                              ),
-                            );
-                          },
-                        ),
-                      )
-                    ],
-                  ),
+                    )
+                  ],
                 ),
               ),
             ),

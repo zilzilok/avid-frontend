@@ -112,4 +112,20 @@ class UserApi {
 
     return res;
   }
+
+  //TODO: пока только отзывы
+  static Future<Response> getUserUpdates() async {
+    var headers = await ApiInfo.defaultAuthorizationHeader();
+
+    Uri uri = Uri.https(ApiInfo.BASE_URL, "/user/games", {"sort" : "desc"});
+
+    var res = await http.get(
+      uri,
+      headers: headers,
+    );
+    log("UserApi.getUserUpdates: response statusCode = ${res.statusCode}");
+    log("UserApi.getUserUpdates: response body = ${res.body}");
+
+    return res;
+  }
 }

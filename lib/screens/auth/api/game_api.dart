@@ -82,7 +82,7 @@ class GameApi {
   }
 }
 
-class GameResult {
+class GameDto {
   final String alias;
   final String title;
   final String imageURL;
@@ -94,12 +94,13 @@ class GameResult {
   final int playtimeMax;
   final int playersAgeMin;
   final int year;
-  final String review;
-  final double rating;
   final double averageRating;
-  bool has;
 
-  GameResult({
+  GameDto({
+    this.alias,
+    this.title,
+    this.imageURL,
+    this.shortDescription,
     this.description,
     this.playersMin,
     this.playersMax,
@@ -107,15 +108,62 @@ class GameResult {
     this.playtimeMax,
     this.playersAgeMin,
     this.year,
-    this.alias,
-    this.title,
-    this.imageURL,
-    this.shortDescription,
+    this.averageRating,
+  });
+
+  factory GameDto.fromJson(Map<String, dynamic> parsedJson) {
+    return GameDto(
+      alias: parsedJson["alias"],
+      title: parsedJson["titles"][0],
+      shortDescription: parsedJson["descriptionShort"],
+      description: parsedJson["description"],
+      imageURL: parsedJson["photoUrl"],
+      year: parsedJson["year"],
+      playersMin: parsedJson["playersMin"],
+      playersMax: parsedJson["playersMax"],
+      playtimeMin: parsedJson["playtimeMin"],
+      playtimeMax: parsedJson["playtimeMax"],
+      playersAgeMin: parsedJson["playersAgeMin"],
+      averageRating: parsedJson["averageRating"],
+    );
+  }
+}
+
+class GameResult extends GameDto {
+  final String review;
+  final double rating;
+  bool has;
+
+  GameResult({
+    String alias,
+    String title,
+    String imageURL,
+    String shortDescription,
+    String description,
+    int playersMin,
+    int playersMax,
+    int playtimeMin,
+    int playtimeMax,
+    int playersAgeMin,
+    int year,
+    double averageRating,
     this.has,
     this.review,
     this.rating,
-    this.averageRating,
-  });
+  }) : super(
+          alias: alias,
+          title: title,
+          imageURL: imageURL,
+          shortDescription: shortDescription,
+          description: description,
+          playersMin: playersMin,
+          playersMax: playersMax,
+          playtimeMin: playtimeMin,
+          playtimeMax: playtimeMax,
+          playersAgeMin: playersAgeMin,
+          year: year,
+          averageRating: averageRating,
+        );
 
   factory GameResult.fromJson(Map<String, dynamic> parsedJson) {
     return GameResult(
@@ -153,7 +201,6 @@ class SearchGameResult extends GameResult {
     int year,
     bool has,
     double averageRating,
-    double rating,
   }) : super(
           alias: alias,
           title: title,
@@ -168,7 +215,6 @@ class SearchGameResult extends GameResult {
           year: year,
           has: has,
           averageRating: averageRating,
-          rating: rating,
         );
 
   factory SearchGameResult.fromJson(Map<String, dynamic> parsedJson) {
@@ -185,7 +231,6 @@ class SearchGameResult extends GameResult {
       playtimeMax: parsedJson["boardGames"]["playtimeMax"],
       playersAgeMin: parsedJson["boardGames"]["playersAgeMin"],
       has: parsedJson["has"],
-      rating: parsedJson["rating"],
       averageRating: parsedJson["boardGames"]["averageRating"],
     );
   }
@@ -210,6 +255,26 @@ class ReviewResult {
       review: parsedJson["review"],
       rating: parsedJson["rating"],
       creatingDate: DateTime.parse(parsedJson["creatingDateTime"]).toLocal(),
+    );
+  }
+}
+
+class ReviewGameResult {
+  final GameResult game;
+  final UserDao owner;
+  final DateTime creatingDate;
+
+  ReviewGameResult({
+    this.game,
+    this.owner,
+    this.creatingDate,
+  });
+
+  factory ReviewGameResult.fromJson(Map<String, dynamic> parsedJson) {
+    return ReviewGameResult(
+      creatingDate: DateTime.parse(parsedJson["creatingDateTime"]).toLocal(),
+      owner: UserDao.fromJson(parsedJson["owner"]),
+      game: GameResult.fromJson(parsedJson),
     );
   }
 }

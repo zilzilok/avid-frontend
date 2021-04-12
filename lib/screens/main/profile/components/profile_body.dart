@@ -8,6 +8,7 @@ import 'package:avid_frontend/screens/main/profile/components/games/games_button
 import 'package:avid_frontend/screens/main/profile/components/profile_bg.dart';
 import 'package:avid_frontend/screens/main/profile/components/profile_info.dart';
 import 'package:avid_frontend/screens/main/profile/components/profile_update_page.dart';
+import 'package:avid_frontend/screens/main/profile/components/profile_updates.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
@@ -62,51 +63,72 @@ class _ProfileBodyState extends State<ProfileBody> {
                   child: SafeArea(
                     child: Align(
                       alignment: Alignment.center,
-                      child: Container(
-                        margin:
-                            EdgeInsets.symmetric(horizontal: size.width * 0.05),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            SizedBox(height: size.height * 0.01),
-                            Text(
-                              "Профиль",
-                              style: GoogleFonts.montserrat(
-                                fontWeight: FontWeight.bold,
-                                color: kPrimaryColor,
-                                fontSize: 20,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          SizedBox(height: size.height * 0.01),
+                          Text(
+                            "Профиль",
+                            style: GoogleFonts.montserrat(
+                              fontWeight: FontWeight.bold,
+                              color: kPrimaryColor,
+                              fontSize: 20,
+                            ),
+                          ),
+                          SizedBox(height: size.height * 0.02),
+                          Expanded(
+                            child: SingleChildScrollView(
+                              physics: ScrollPhysics(),
+                              child: Container(
+                                margin:
+                                EdgeInsets.symmetric(horizontal: size.width * 0.05),
+                                child: Column(
+                                  children: [
+                                    ProfileInfo(),
+                                    SizedBox(height: size.height * 0.02),
+                                    RoundedButton(
+                                      bgColor: kWhiteColor,
+                                      borderColor: kPrimaryColor,
+                                      textColor: kPrimaryColor,
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 0, horizontal: 15),
+                                      text: "редактировать профиль",
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (context) {
+                                            return ProfileUpdatePage();
+                                          }),
+                                        );
+                                      },
+                                    ),
+                                    CustomButton(
+                                      text: "друзья",
+                                      onPressed: () {},
+                                    ),
+                                    GamesButton(),
+                                    // CustomButton(
+                                    //   text: "клубы",
+                                    //   onPressed: () {},
+                                    // ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 5),
+                                      child: Text(
+                                        "Последние действия",
+                                        style: GoogleFonts.montserrat(
+                                          fontWeight: FontWeight.bold,
+                                          color: kPrimaryColor,
+                                          fontSize: 20,
+                                        ),
+                                      ),
+                                    ),
+                                    ProfileUpdates(),
+                                  ],
+                                ),
                               ),
                             ),
-                            SizedBox(height: size.height * 0.02),
-                            ProfileInfo(),
-                            SizedBox(height: size.height * 0.02),
-                            RoundedButton(
-                              bgColor: kWhiteColor,
-                              borderColor: kPrimaryColor,
-                              textColor: kPrimaryColor,
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 0, horizontal: 15),
-                              text: "редактировать профиль",
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) {
-                                    return ProfileUpdatePage();
-                                  }),
-                                );
-                              },
-                            ),
-                            CustomButton(
-                              text: "друзья",
-                              onPressed: () {},
-                            ),
-                            GamesButton(),
-                            // CustomButton(
-                            //   text: "клубы",
-                            //   onPressed: () {},
-                            // ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                   ),

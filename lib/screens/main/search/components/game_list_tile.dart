@@ -9,9 +9,11 @@ class GameListTile extends StatelessWidget {
   const GameListTile({
     Key key,
     @required this.game,
+    this.bgColor = kLightGreyColor,
   }) : super(key: key);
 
   final GameResult game;
+  final Color bgColor;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +32,7 @@ class GameListTile extends StatelessWidget {
         child: Container(
           height: size.width * 0.33,
           decoration: BoxDecoration(
-              color: kLightGreyColor,
+              color: bgColor,
               borderRadius: BorderRadius.all(Radius.circular(22))),
           child: Row(
             children: [

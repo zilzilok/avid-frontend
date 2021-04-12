@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:avid_frontend/components/app_utils.dart';
 import 'package:avid_frontend/res/constants.dart';
 import 'package:avid_frontend/screens/auth/api/user_api.dart';
 import 'package:avid_frontend/screens/auth/components/auth_utils.dart';
@@ -110,7 +111,8 @@ class ProfileInfo extends StatelessWidget {
                               if (!user.active)
                                 Text(
                                   "почта не подтверждена",
-                                  style: GoogleFonts.montserrat(fontSize: 14, color: Colors.red),
+                                  style: GoogleFonts.montserrat(
+                                      fontSize: 14, color: Colors.red),
                                 ),
                             ],
                           ),
@@ -122,6 +124,9 @@ class ProfileInfo extends StatelessWidget {
               ),
             );
           }
+        } else if (snapshot.hasError) {
+          AppUtils.displaySnackBar(
+              context, "Ошибка. Возможно отсутствует подключение к интернету.");
         }
         return SizedBox(
           child: CircularProgressIndicator(
