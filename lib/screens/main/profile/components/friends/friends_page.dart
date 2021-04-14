@@ -16,11 +16,13 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 class FriendsPage extends StatelessWidget {
   final List<UserResult> friends;
   final RefreshController parentRefreshController;
+  final int userId;
 
   const FriendsPage({
     Key key,
     @required this.friends,
     this.parentRefreshController,
+    this.userId = -1,
   }) : super(key: key);
 
   @override
@@ -31,9 +33,124 @@ class FriendsPage extends StatelessWidget {
         onTap: () {
           FocusScope.of(context).requestFocus(new FocusNode());
         },
-        child: FriendsPageBody(
-          friends: friends,
-          parentRefreshController: parentRefreshController,
+        child: userId != -1
+            ? FriendFriendsPageBody(
+                friends: friends,
+          userId: userId,
+              )
+            : FriendsPageBody(
+                friends: friends,
+                parentRefreshController: parentRefreshController,
+              ),
+      ),
+    );
+  }
+}
+
+class FriendFriendsPageBody extends StatefulWidget {
+  final List<UserResult> friends;
+  final int userId;
+
+  const FriendFriendsPageBody({Key key, this.friends, this.userId})
+      : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() =>
+      _FriendFriendsPageBodyState(friends, userId);
+}
+
+class _FriendFriendsPageBodyState extends State<FriendFriendsPageBody> {
+  final List<UserResult> friends;
+  final int userId;
+
+  _FriendFriendsPageBodyState(this.friends, this.userId);
+
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    return ProfileBackground(
+      child: SafeArea(
+        child: Column(
+          children: [
+            Container(
+              margin: EdgeInsets.only(top: 5, right: 5, bottom: 10),
+              width: size.width,
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: Icon(
+                    Icons.arrow_back_sharp,
+                    size: size.width * 0.1,
+                    color: kWhiteColor,
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                    color: kWhiteColor,
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(50),
+                        topRight: Radius.circular(50))),
+                child: SafeArea(
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        SizedBox(height: size.height * 0.01),
+                        Text(
+                          userId == -1 ? "Друзья" : "Друзья $userId",
+                          style: GoogleFonts.montserrat(
+                            fontWeight: FontWeight.bold,
+                            color: kPrimaryColor,
+                            fontSize: 20,
+                          ),
+                        ),
+                        SizedBox(height: size.height * 0.02),
+                        Expanded(
+                          child: SingleChildScrollView(
+                            physics: ScrollPhysics(),
+                            child: Container(
+                              margin: EdgeInsets.symmetric(
+                                  horizontal: size.width * 0.05),
+                              child: friends.length > 0
+                                  ? ListView.builder(
+                                      physics: NeverScrollableScrollPhysics(),
+                                      shrinkWrap: true,
+                                      itemCount: friends.length,
+                                      itemBuilder: (context, index) {
+                                        return Padding(
+                                          padding:
+                                              const EdgeInsets.only(bottom: 10),
+                                          child: FriendListTile(
+                                              friend: friends[index]),
+                                        );
+                                      },
+                                    )
+                                  : Center(
+                                      child: Text(
+                                        "Нет друзей",
+                                        style: GoogleFonts.montserrat(
+                                          color: kPrimaryColor,
+                                          fontSize: 20,
+                                        ),
+                                      ),
+                                    ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -79,7 +196,6 @@ class _FriendsPageBodyState extends State<FriendsPageBody> {
     });
     parentRefreshController.requestRefresh();
     parentRefreshController.refreshCompleted();
-
 
     _refreshController.refreshCompleted();
   }

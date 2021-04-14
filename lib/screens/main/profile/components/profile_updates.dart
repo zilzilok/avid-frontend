@@ -14,10 +14,16 @@ import 'package:http/http.dart';
 
 // TODO: Пока только отзывы в дальнейшем должны быть и другие события
 class ProfileUpdates extends StatelessWidget {
+  final int userId;
+
+  const ProfileUpdates({Key key, this.userId = -1}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: UserApi.getUserUpdates(),
+      future: userId != -1
+          ? UserApi.getUserUpdatesById(userId)
+          : UserApi.getUserUpdates(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           var res = snapshot.data as Response;
@@ -31,10 +37,12 @@ class ProfileUpdates extends StatelessWidget {
             Iterable iterableParsedJson = json.decode(body);
             var reviews = <ReviewGameResult>[];
             if (iterableParsedJson.isNotEmpty) {
-              reviews = List<ReviewGameResult>.from(iterableParsedJson
-                  .map((game) => ReviewGameResult.fromJson(game)));
+              reviews = List<ReviewGameResult>.from(iterableParsedJson.map(
+                  (review) => userId != -1
+                      ? ReviewGameByUserResult.fromJson(review)
+                      : ReviewGameResult.fromJson(review)));
             }
-            log("games length = ${reviews.length}");
+            log("reviews length = ${reviews.length}");
             return reviews.length > 0
                 ? ListView.builder(
                     physics: NeverScrollableScrollPhysics(),

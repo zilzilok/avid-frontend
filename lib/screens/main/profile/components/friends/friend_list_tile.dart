@@ -5,6 +5,7 @@ import 'package:avid_frontend/components/rounded_button.dart';
 import 'package:avid_frontend/res/constants.dart';
 import 'package:avid_frontend/screens/auth/api/user_api.dart';
 import 'package:avid_frontend/screens/auth/components/auth_utils.dart';
+import 'package:avid_frontend/screens/main/profile/components/friends/friend_page.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +35,14 @@ class _FriendListTileState extends State<FriendListTile> {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 10),
       child: GestureDetector(
-        onTap: () {},
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) {
+              return FriendPage(userId: friend.id,);
+            }),
+          );
+        },
         child: Container(
           decoration: BoxDecoration(
               color: kLightGreyColor,
@@ -117,22 +125,25 @@ class _FriendListTileState extends State<FriendListTile> {
                 ),
                 Expanded(
                   flex: 2,
-                  child: friend.has
-                      ? RoundedButton(
-                          bgColor: kWhiteColor,
-                          borderColor: kPrimaryColor,
-                          textColor: kPrimaryColor,
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 0, horizontal: 10),
-                          text: "удалить",
-                          onPressed: _confirmDialog,
-                        )
-                      : RoundedButton(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 0, horizontal: 10),
-                          text: "добавить",
-                          onPressed: _addPressed,
-                        ),
+                  child: FittedBox(
+                    fit: BoxFit.contain,
+                    child: friend.has
+                        ? RoundedButton(
+                            bgColor: kWhiteColor,
+                            borderColor: kPrimaryColor,
+                            textColor: kPrimaryColor,
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 0, horizontal: 10),
+                            text: "удалить",
+                            onPressed: _confirmDialog,
+                          )
+                        : RoundedButton(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 0, horizontal: 10),
+                            text: "добавить",
+                            onPressed: _addPressed,
+                          ),
+                  ),
                 ),
               ],
             ),

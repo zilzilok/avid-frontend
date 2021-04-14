@@ -51,7 +51,6 @@ class GamesPage extends StatelessWidget {
                     child: Align(
                       alignment: Alignment.center,
                       child: Container(
-                        width: size.width * 0.9,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
@@ -66,27 +65,36 @@ class GamesPage extends StatelessWidget {
                             ),
                             SizedBox(height: size.height * 0.02),
                             Expanded(
-                              child: games.length > 0
-                                  ? ListView.builder(
-                                      itemCount: games.length,
-                                      itemBuilder: (context, index) {
-                                        return Padding(
-                                          padding:
-                                              const EdgeInsets.only(bottom: 10),
-                                          child:
-                                              GameListTile(game: games[index]),
-                                        );
-                                      },
-                                    )
-                                  : Center(
-                                    child: Text(
-                                        "У вас нет игр",
-                                        style: GoogleFonts.montserrat(
-                                          color: kPrimaryColor,
-                                          fontSize: 20,
+                              child: SingleChildScrollView(
+                                physics: ScrollPhysics(),
+                                child: Container(
+                                  margin: EdgeInsets.symmetric(
+                                      horizontal: size.width * 0.05),
+                                  child: games.length > 0
+                                      ? ListView.builder(
+                                          physics: NeverScrollableScrollPhysics(),
+                                          shrinkWrap: true,
+                                          itemCount: games.length,
+                                          itemBuilder: (context, index) {
+                                            return Padding(
+                                              padding:
+                                                  const EdgeInsets.only(bottom: 10),
+                                              child:
+                                                  GameListTile(game: games[index]),
+                                            );
+                                          },
+                                        )
+                                      : Center(
+                                          child: Text(
+                                            "Нет игр",
+                                            style: GoogleFonts.montserrat(
+                                              color: kPrimaryColor,
+                                              fontSize: 20,
+                                            ),
+                                          ),
                                         ),
-                                      ),
-                                  ),
+                                ),
+                              ),
                             ),
                           ],
                         ),

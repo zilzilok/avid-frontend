@@ -13,12 +13,16 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart';
 
 class ProfileInfo extends StatelessWidget {
+  final int userId;
+
+  const ProfileInfo({Key key, this.userId = -1}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     double imageRadius = size.width / 7;
     return FutureBuilder(
-      future: UserApi.getUser(),
+      future: userId != -1 ? UserApi.getUserById(userId) : UserApi.getUser(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           var res = snapshot.data as Response;

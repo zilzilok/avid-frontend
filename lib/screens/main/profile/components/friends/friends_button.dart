@@ -11,16 +11,19 @@ import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:http/http.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-
 class FriendsButton extends StatelessWidget {
   final RefreshController parentRefreshController;
+  final int userId;
 
-  const FriendsButton({Key key, this.parentRefreshController}) : super(key: key);
+  const FriendsButton({Key key, this.parentRefreshController, this.userId = -1})
+      : super(key: key);
 
   @override
   Widget build(context) {
     return FutureBuilder(
-      future: UserApi.getUserFriends(),
+      future: userId != -1
+          ? UserApi.getUserFriendsById(userId)
+          : UserApi.getUserFriends(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           var res = snapshot.data as Response;
@@ -34,8 +37,8 @@ class FriendsButton extends StatelessWidget {
             Iterable iterableParsedJson = json.decode(body);
             var friends = <UserResult>[];
             if (iterableParsedJson.isNotEmpty) {
-              friends = List<UserResult>.from(
-                  iterableParsedJson.map((friend) => UserResult.fromJson(friend)));
+              friends = List<UserResult>.from(iterableParsedJson
+                  .map((friend) => UserResult.fromJson(friend)));
             }
             log("friends length = ${friends.length}");
             return CustomButton(
@@ -45,7 +48,11 @@ class FriendsButton extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) {
-                    return FriendsPage(friends: friends, parentRefreshController: parentRefreshController,);
+                    return FriendsPage(
+                      userId: userId,
+                      friends: friends,
+                      parentRefreshController: parentRefreshController,
+                    );
                   }),
                 );
               },

@@ -68,6 +68,19 @@ class UserApi {
     return res;
   }
 
+  static Future<Response> getUserById(int id) async {
+    var headers = await ApiInfo.defaultAuthorizationHeader();
+
+    var res = await http.get(
+      Uri.https(ApiInfo.BASE_URL, "/user/$id"),
+      headers: headers,
+    );
+    log("UserApi.getUserById: response statusCode = ${res.statusCode}");
+    log("UserApi.getUserById: response body = ${res.body}");
+
+    return res;
+  }
+
   static Future<int> addGame(String alias, String review, double rating) async {
     var headers = await ApiInfo.defaultAuthorizationHeader();
 
@@ -113,6 +126,22 @@ class UserApi {
     return res;
   }
 
+  static Future<Response> getUserGamesById(int id) async {
+    var headers = await ApiInfo.defaultAuthorizationHeader();
+
+    Uri uri =
+        Uri.https(ApiInfo.BASE_URL, "/user/$id/games", {"byUser": "true"});
+
+    var res = await http.get(
+      uri,
+      headers: headers,
+    );
+    log("UserApi.getUserGamesById: response statusCode = ${res.statusCode}");
+    log("UserApi.getUserGamesById: response body = ${res.body}");
+
+    return res;
+  }
+
   //TODO: пока только отзывы
   static Future<Response> getUserUpdates() async {
     var headers = await ApiInfo.defaultAuthorizationHeader();
@@ -125,6 +154,23 @@ class UserApi {
     );
     log("UserApi.getUserUpdates: response statusCode = ${res.statusCode}");
     log("UserApi.getUserUpdates: response body = ${res.body}");
+
+    return res;
+  }
+
+  //TODO: пока только отзывы
+  static Future<Response> getUserUpdatesById(int id) async {
+    var headers = await ApiInfo.defaultAuthorizationHeader();
+
+    Uri uri = Uri.https(ApiInfo.BASE_URL, "/user/$id/games",
+        {"sort": "desc", "byUser": "true"});
+
+    var res = await http.get(
+      uri,
+      headers: headers,
+    );
+    log("UserApi.getUserUpdatesById: response statusCode = ${res.statusCode}");
+    log("UserApi.getUserUpdatesById: response body = ${res.body}");
 
     return res;
   }
@@ -142,7 +188,35 @@ class UserApi {
     return res;
   }
 
-  static Future<List<SearchUserResult>> getSearchedUsersJson(String search) async {
+  static Future<Response> getUserFriendsById(int id) async {
+    var headers = await ApiInfo.defaultAuthorizationHeader();
+
+    var res = await http.get(
+      Uri.https(ApiInfo.BASE_URL, "/user/$id/friends"),
+      headers: headers,
+    );
+    log("UserApi.getUserFriendsById: response statusCode = ${res.statusCode}");
+    log("UserApi.getUserFriendsById: response body = ${res.body}");
+
+    return res;
+  }
+
+  static Future<Response> getUserFriendsUpdates() async {
+    var headers = await ApiInfo.defaultAuthorizationHeader();
+
+    var res = await http.get(
+      Uri.https(ApiInfo.BASE_URL, "/user/friends/games",
+          {"sort": "desc", "byUser": "true"}),
+      headers: headers,
+    );
+    log("UserApi.getUserFriendsUpdates: response statusCode = ${res.statusCode}");
+    log("UserApi.getUserFriendsUpdates: response body = ${res.body}");
+
+    return res;
+  }
+
+  static Future<List<SearchUserResult>> getSearchedUsersJson(
+      String search) async {
     var headers = await ApiInfo.defaultAuthorizationHeader();
 
     Uri uri = Uri.https(ApiInfo.BASE_URL, "/user/all",
