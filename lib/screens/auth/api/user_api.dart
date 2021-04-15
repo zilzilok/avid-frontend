@@ -37,7 +37,8 @@ class UserApi {
     };
 
     String photoPath;
-    if (fileName != null && fileName.isNotEmpty) {
+    if (fileName != null && fileName.isNotEmpty
+        && !fileName.startsWith("https://s3.eu-north-1.amazonaws.com/avid-app/")) {
       photoPath = await saveAvatar(fileName);
       if (photoPath != null) {
         bodyMap.addAll({"photoPath": photoPath});

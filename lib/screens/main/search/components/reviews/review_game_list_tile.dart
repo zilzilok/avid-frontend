@@ -44,7 +44,7 @@ class ReviewGameListTile extends StatelessWidget {
                       radius: imageRadius,
                       backgroundColor: kPrimaryLightColor,
                       // TODO: Временно, чтоб избежать большого количества запросов на aws s3
-                      child: /*review.owner.photoPath != null && review.owner.photoPath.isNotEmpty*/ false
+                      child: review.owner.photoPath != null && review.owner.photoPath.isNotEmpty /*false*/
                           ? ClipRRect(
                               borderRadius: BorderRadius.circular(imageRadius),
                               child: Image.network(

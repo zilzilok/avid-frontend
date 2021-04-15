@@ -56,7 +56,7 @@ class _FriendListTileState extends State<FriendListTile> {
                   radius: imageRadius,
                   backgroundColor: kPrimaryLightColor,
                   // TODO: Временно, чтоб избежать большого количества запросов на aws s3
-                  child: /*user.photoPath != null && user.photoPath.isNotEmpty*/ false
+                  child: friend.photoPath != null && friend.photoPath.isNotEmpty /*false*/
                       ? ClipRRect(
                           borderRadius: BorderRadius.circular(imageRadius),
                           child: Image.network(

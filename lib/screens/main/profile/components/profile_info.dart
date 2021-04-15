@@ -44,7 +44,7 @@ class ProfileInfo extends StatelessWidget {
                     radius: imageRadius,
                     backgroundColor: kPrimaryLightColor,
                     // TODO: Временно, чтоб избежать большого количества запросов на aws s3
-                    child: /*user.photoPath != null && user.photoPath.isNotEmpty*/ false
+                    child: user.photoPath != null && user.photoPath.isNotEmpty /*false*/
                         ? ClipRRect(
                             borderRadius: BorderRadius.circular(imageRadius),
                             child: Image.network(
